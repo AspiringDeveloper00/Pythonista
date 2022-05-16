@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Pythonista: Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href=https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chapters.css') }}">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+</head>
+
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <script>
+        Swal.fire({
+            icon: '{{category}}',
+            text: '{{message}}'
+        });
+    </script>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <header>
+        <nav class="navbar navbar-dark navbar-expand-sm fixed-top " id="primary-nav">
+            <div class="container left">
+                <a class="navbar-brand" id="logo" href="#">
+                    <img src="{{ url_for('static', filename='images/logo-purple.png') }}" class="logo-icon" alt="">
+                    <span class="name-top"><b>Pythonista</b></span>
+                </a>
+                <button id="hamburger" class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+                    data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span id="span-1"> </span>
+                    <span> </span>
+                    <span id="span-3"> </span>
+                </button>
+                <div id="navbarCollapse" class="collapse navbar-collapse">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a href="index" class="nav-link nav-link-fade-up">
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="chapters" class="nav-link nav-link-fade-up active">
+                                Chapters
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            {%if session['username']%}
+                            <a href="tests" class="nav-link nav-link-fade-up">
+                                Tests
+                            </a>
+                            {%else%}
+                            <a href="login" class="nav-link nav-link-fade-up">
+                                Tests
+                            </a>
+                            {%endif%}
+                        </li>
+                        <li class="nav-item">
+                            {%if session['username']%}
+                            <a href="profile" class="nav-link nav-link-fade-up">
+                                Profile
+                            </a>
+                            {%else%}
+                            <a href="login" class="nav-link nav-link-fade-up">
+                                Login
+                            </a>
+                            {%endif%}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sidebar -->
+    <img class="btn image2" src="{{ url_for('static', filename='images/up-black.png') }}" alt="">
+
+    <nav class="sidebar">
+        <div class="header">
+            Chapters
+        </div>
+        <ul class="ul">
+            <li class="li">
+                <a href="#" class="feat-btn topics">Basics
+                    <img class="image" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="">
+                </a>
+                <ul class="feat-show inner-ul">
+                    <li class="inner-li"><a class="inner-a">Introduction to Python</a></li>
+                    <li class="inner-li"><a class="inner-a">B</a></li>
+                    <li class="inner-li"><a class="inner-a">C</a></li>
+                    <li class="inner-li"><a class="inner-a">D</a></li>
+                </ul>
+            </li>
+            <li class="li">
+                <a href="#" class="feat-btn topics">Advanced
+                    <img class="image" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="">
+                </a>
+                <ul class="feat-show inner-ul">
+                    <li class="inner-li"><a class="inner-a">A</a></li>
+                    <li class="inner-li"><a class="inner-a">B</a></li>
+                    <li class="inner-li"><a class="inner-a">C</a></li>
+                    <li class="inner-li"><a class="inner-a">D</a></li>
+                </ul>
+            </li>
+            <li class="li">
+                <a href="#" class="feat-btn topics">Expert
+                    <img class="image" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="">
+                </a>
+                <ul class="feat-show inner-ul">
+                    <li class="inner-li"><a class="inner-a">A</a></li>
+                    <li class="inner-li"><a class="inner-a">B</a></li>
+                    <li class="inner-li"><a class="inner-a">C</a></li>
+                    <li class="inner-li"><a class="inner-a">D</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <!-- Chapters -->
+    <section class="section-1">
+        <div class="container-fluid">
+            <div class="row" id="Basics">
+                <div class="col-12">
+                    <h1>Basics <span class="subheader">- for beginners</span></h1>
+                    <hr>
+                </div>
+            </div>
+            <!-- Chapter 1.1 -->
+            <div id="IntroductiontoPython">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Introduction to Python</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">
+                            <p>Python is a popular programming language. It was created by Guido van Rossum, and
+                                released in 1991.</p>
+
+                            <p>It is used for:</p>
+
+                            <ul style="padding-left:2%;">
+                                <li>web development (server-side),</li>
+                                <li>software development,</li>
+                                <li>mathematics,</li>
+                                <li>system scripting.</li>
+                            </ul>
+                            <p>What can Python do?</p>
+                            <ul style="padding-left:2%;">
+                                <li>Python can be used on a server to create web applications.</li>
+                                <li>Python can be used alongside software to create workflows.</li>
+                                <li>Python can connect to database systems. It can also read and modify files. </li>
+                                <li>Python can be used to handle big data and perform complex mathematics.</li>
+                                <li>Python can be used for rapid prototyping, or for production-ready software
+                                    development.</li>
+                            </ul>
+
+
+                            <p>Why Python?</p>
+                            <ul style="padding-left:2%;">
+                                <li>Python works on different platforms (Windows, Mac, Linux, Raspberry Pi, etc).</li>
+                                <li>Python has a simple syntax similar to the English language.</li>
+                                <li>Python has syntax that allows developers to write programs with fewer lines than
+                                    some other programming languages.</li>
+                                <li>Python runs on an interpreter system, meaning that code can be executed as soon as
+                                    it is written. This means that prototyping can be very quick.</li>
+                                <li>Python can be treated in a procedural way, an object-oriented way or a functional
+                                    way.</li>
+                            </ul>
+
+                            <p> Good to know</p>
+                            <ul style="padding-left:2%;">
+                                <li>The most recent major version of Python is Python 3, which we shall be using in this
+                                    tutorial. However, Python 2, although not being updated with anything other than
+                                    security updates, is still quite popular.
+                                </li>
+                                <li> In this tutorial Python will be written in a text editor. It is possible to write
+                                    Python in an Integrated Development Environment, such as Thonny, Pycharm, Netbeans
+                                    or Eclipse which are particularly useful when managing larger collections of Python
+                                    files.
+                                </li>
+                                <li>Python Syntax compared to other programming languages.</li>
+                                <li>Python was designed for readability, and has some similarities to the English
+                                    language with influence from mathematics.</li>
+                                <li>Python uses new lines to complete a command, as opposed to other programming
+                                    languages which often use semicolons or parentheses.</li>
+                                <li>Python relies on indentation, using whitespace, to define scope; such as the scope
+                                    of loops, functions and classes. Other programming languages often use
+                                    curly-brackets for this purpose.</li>
+                            </ul>
+                                <button class="button "> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- Chapter 1.2 -->
+            <div id="2">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Advanced</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">CSS is designed primarily to enable the separation of
+                            document content from document presentation, including aspects such as the layout, colors,
+                            and fonts. This separation can improve content accessibility, provide more flexibility and
+                            control in the specification of presentation characteristics, enable multiple HTML pages to
+                            share formatting by specifying the relevant CSS in a separate .css file, and reduce
+                            complexity and repetition in the structural content.
+                            Separation of formatting and content makes it possible to present the same markup page in
+                            different styles for different rendering methods, such as on-screen, in print, by voice (via
+                            speech-based browser or screen reader), and on Braille-based tactile devices. It can also
+                            display the web page differently depending on the screen size or viewing device. Readers can
+                            also specify a different style sheet, such as a CSS file stored on their own computer, to
+                            override the one the author specified.
+                            Changes to the graphic design of a document (or hundreds of documents) can be applied
+                            quickly and easily, by editing a few lines in the CSS file they use, rather than by changing
+                            markup in the documents.
+                            The CSS specification describes a priority scheme to determine which style rules apply if
+                            more than one rule matches against a particular element. In this so-called cascade,
+                            priorities (or weights) are calculated and assigned to rules, so that the results are
+                            predictable.
+                            The CSS specifications are maintained by the World Wide Web Consortium (W3C). Internet media
+                            type (MIME type) text/css is registered for use with CSS by RFC 2318 (March 1998). The W3C
+                            operates a free CSS validation service for CSS documents.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- Chapter 1.3 -->
+            <div id="3">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Expert</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">CSS is designed primarily to enable the separation of
+                            document content from document presentation, including aspects such as the layout, colors,
+                            and fonts. This separation can improve content accessibility, provide more flexibility and
+                            control in the specification of presentation characteristics, enable multiple HTML pages to
+                            share formatting by specifying the relevant CSS in a separate .css file, and reduce
+                            complexity and repetition in the structural content.
+                            Separation of formatting and content makes it possible to present the same markup page in
+                            different styles for different rendering methods, such as on-screen, in print, by voice (via
+                            speech-based browser or screen reader), and on Braille-based tactile devices. It can also
+                            display the web page differently depending on the screen size or viewing device. Readers can
+                            also specify a different style sheet, such as a CSS file stored on their own computer, to
+                            override the one the author specified.
+                            Changes to the graphic design of a document (or hundreds of documents) can be applied
+                            quickly and easily, by editing a few lines in the CSS file they use, rather than by changing
+                            markup in the documents.
+                            The CSS specification describes a priority scheme to determine which style rules apply if
+                            more than one rule matches against a particular element. In this so-called cascade,
+                            priorities (or weights) are calculated and assigned to rules, so that the results are
+                            predictable.
+                            The CSS specifications are maintained by the World Wide Web Consortium (W3C). Internet media
+                            type (MIME type) text/css is registered for use with CSS by RFC 2318 (March 1998). The W3C
+                            operates a free CSS validation service for CSS documents.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="Advanced">
+                <div class="col-12">
+                    <h1>Advanced <span class="subheader">- for intermediates</span></h1>
+                    <hr>
+                </div>
+            </div>
+            <div class="row" id="Expert">
+                <div class="col-12">
+                    <h1>Expert <span class="subheader">- for experts</span></h1>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='javascript/animate.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/navbar.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/chapters.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/button.js') }}"></script>
+
+</body>
+
+</html>
