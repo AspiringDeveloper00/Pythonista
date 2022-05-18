@@ -110,7 +110,10 @@ def chapters():
     if request.method=="GET":
         return render_template('chapters.html')
     
-
+@app.route('/python', methods=['GET'])
+def python():
+    if request.method=="GET":
+        return render_template('python.html')
 
 if __name__ == '__main__':
  app.run(debug=True)
