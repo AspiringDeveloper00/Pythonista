@@ -4,15 +4,15 @@ from base64 import b64encode
 from flaskext.mysql import MySQL
 from matplotlib.style import use
 import json
- 
+from credentials import *
 app = Flask(__name__)
 
 
-app.config['SECRET_KEY'] = '80204ac8e871415e2a9e22d04367c65b541a8dde5f7604c13642ebd2a6dc8927f08cf2c3c99c788e1627c997aaa903da3bafbbba66264896de481bcfa0e18db0a59610b4f419d1ec4397b108146b0e1ebc2917f1ac99fc4442920c353664e19ac3ef1c27d85a1142b50557568e32bcf6bfc72e70c9f761b9a0e6243550fc007f' 
+app.config['SECRET_KEY'] = secret_key
 
 mysql = MySQL()
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = '1234'
+app.config['MYSQL_DATABASE_USER'] = db_username
+app.config['MYSQL_DATABASE_PASSWORD'] = db_password
 app.config['MYSQL_DATABASE_DB'] = 'pythonista'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
