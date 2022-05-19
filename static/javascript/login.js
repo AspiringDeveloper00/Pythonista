@@ -4,10 +4,12 @@ $(document).ready(function () {
     'use strict';
 
     var usernameError = true,
-        emailError    = true,
+        emailError = true,
         passwordError = true,
-        passConfirm   = true,
-        ageError=true;
+        passConfirm = true,
+        ageError = true,
+        loginemail = true,
+        loginpass = true;
 
     // Detect browser for css purpose
     if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -47,6 +49,29 @@ $(document).ready(function () {
             }
         }
 
+        // Email
+        if ($(this).hasClass('loginemail')) {
+            if ($(this).val().length == '') {
+                $(this).siblings('span.error').text('Please type your email address').fadeIn().parent('.form-group').addClass('hasError');
+                loginemail = true;
+            } else {
+                $(this).siblings('.error').text('').fadeOut().parent('.form-group').removeClass('hasError');
+                loginemail = false;
+            }
+        }
+
+        // PassWord
+        if ($(this).hasClass('loginPassword')) {
+            if ($(this).val().length == '') {
+                $(this).siblings('span.error').text('Please type your password').fadeIn().parent('.form-group').addClass('hasError');
+                loginpass = true;
+            } else {
+                $(this).siblings('.error').text('').fadeOut().parent('.form-group').removeClass('hasError');
+                loginpass = false;
+            }
+        }
+
+
         // PassWord
         if ($(this).hasClass('pass')) {
             if ($(this).val().length < 8) {
@@ -60,7 +85,7 @@ $(document).ready(function () {
 
 
         if ($(this).hasClass('age')) {
-            if ( $(this).val().length===0  || $(this).val() <5 || $(this).val() >99 ) {
+            if ($(this).val().length === 0 || $(this).val() < 5 || $(this).val() > 99) {
                 $(this).siblings('span.error').text('Please enter an age between 5 and 99').fadeIn().parent('.form-group').addClass('hasError');
                 ageError = true;
             } else {
@@ -102,19 +127,80 @@ $(document).ready(function () {
 
     // Form submit
     $('form.signup-form').submit(function (event) {
-
-        if (usernameError == true || emailError == true || passwordError == true || passConfirm == true || ageError==true) {
-            event.preventDefault();
+        event.preventDefault();
+        if (usernameError == true || emailError == true || passwordError == true || passConfirm == true || ageError == true) {
             $('.username, .email, .pass, .passConfirm, .age, .level').blur();
-        }else{
-            $(this).unbind('submit').submit()
+        } else {
+            signup();
         }
     });
 
-    // Reload page
-    $('a.profile').on('click', function () {
-        location.reload(true);
+
+    $('form.login-form').submit(function (event) {
+        event.preventDefault();
+        if (loginemail == true || loginpass == true) {
+            $('.loginemail, .loginPassword').blur();
+        } else {
+            login();
+        }
+
     });
 
 
+
+
 });
+
+
+function login() {
+    $.ajax({
+        data: {
+            email: $('#loginemail').val(),
+            password: $('#loginPassword').val()
+        },
+        type: 'POST',
+        url: '/login'
+    })
+        .done(function (data) {
+            if (data.error) {
+                Swal.fire({
+                    icon: 'error',
+                    text: data.error
+                });
+                $('.login').removeClass('switched').siblings('.signup').addClass('switched');
+
+            } else if (data.success) {
+                localStorage['message'] = data.success;
+                $(location).prop('href', 'home')
+            }
+        });
+
+};
+
+
+function signup() {
+    $.ajax({
+        data: {
+            username: $('#username').val(),
+            password: $('#password').val(),
+            email: $('#email').val(),
+            age: $('#age').val(),
+            level: $('#level').val()
+        },
+        type: 'POST',
+        url: '/signup'
+    })
+        .done(function (data) {
+            if (data.info) {
+                Swal.fire({
+                    icon: 'info',
+                    text: data.info
+                });
+            } else if (data.success) {
+                localStorage['message'] = data.success;
+                window.location.href('/home');
+            }
+
+        });
+
+};

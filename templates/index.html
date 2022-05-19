@@ -18,20 +18,29 @@
 </head>
 
 <body>
-  
+
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-    {% for category, message in messages %}
-    <script>
-      Swal.fire({
-      icon:'{{category}}',
+  {% for category, message in messages %}
+  <script>
+    Swal.fire({
+      icon: '{{category}}',
       text: '{{message}}'
-        });
-    </script>
-    {% endfor %}
+    });
+  </script>
+  {% endfor %}
   {% endif %}
-{% endwith %}
+  {% endwith %}
 
+  <script>
+    if (localStorage['message']) {
+      Swal.fire({
+        icon: 'success',
+        text: localStorage['message']
+      });
+      localStorage.removeItem('message')
+    }
+  </script>
 
 
   <header>
@@ -105,7 +114,7 @@
             <p class="header">A New Way to Learn</p>
             <p class="subtext  underline"><span class="name">Pythonista</span> is the best platform to help you enhance
               your skills and expand your knowledge on the most popular coding language... Python!</p>
-            <button class="readmore"onclick="window.location='chapters'">Start Learning!</button>
+            <button class="readmore" onclick="window.location='chapters'">Start Learning!</button>
 
           </div>
           <div class="col-sm-3 col-2">

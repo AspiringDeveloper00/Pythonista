@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chapters.css') }}">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 
 
@@ -34,6 +35,8 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
+
+    
     <header>
         <nav class="navbar navbar-dark navbar-expand-sm fixed-top " id="primary-nav">
             <div class="container left">
@@ -73,9 +76,9 @@
                         </li>
                         <li class="nav-item">
                             <a href="python" class="nav-link nav-link-fade-up">
-                              Why Python? | Install
+                                Why Python? | Install
                             </a>
-                          </li>
+                        </li>
                         <li class="nav-item">
                             {%if session['username']%}
                             <a href="profile" class="nav-link nav-link-fade-up">
@@ -102,55 +105,53 @@
         </div>
         <ul class="ul">
             <li class="li">
-                <a href="#" class="feat-btn topics">Basics
+                <a href="#Basics" class="feat-btn topics">Basics
                     <img class="image" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="">
                 </a>
                 <ul class="feat-show inner-ul">
-                    <li class="inner-li"><a class="inner-a">Introduction to Python</a></li>
-                    <li class="inner-li"><a class="inner-a">B</a></li>
-                    <li class="inner-li"><a class="inner-a">C</a></li>
-                    <li class="inner-li"><a class="inner-a">D</a></li>
+                    <li class="inner-li"><a class="inner-a">Quickstart</a></li>
+                    <li class="inner-li"><a class="inner-a">Chapter 1</a></li>
+                    <li class="inner-li"><a class="inner-a">Chapter 2</a></li>
+                    <li class="inner-li"><a class="inner-a">Chapter 3</a></li>
                 </ul>
             </li>
             <li class="li">
-                <a href="#" class="feat-btn topics">Advanced
+                <a href="#Advanced" class="feat-btn topics">Advanced
                     <img class="image" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="">
                 </a>
                 <ul class="feat-show inner-ul">
-                    <li class="inner-li"><a class="inner-a">A</a></li>
-                    <li class="inner-li"><a class="inner-a">B</a></li>
-                    <li class="inner-li"><a class="inner-a">C</a></li>
-                    <li class="inner-li"><a class="inner-a">D</a></li>
+                    <li class="inner-li"><a class="inner-a">Chapter 4</a></li>
+                    <li class="inner-li"><a class="inner-a">Chapter 5</a></li>
+                    <li class="inner-li"><a class="inner-a">Chapter 6</a></li>
                 </ul>
             </li>
             <li class="li">
-                <a href="#" class="feat-btn topics">Expert
+                <a href="#Expert" class="feat-btn topics">Expert
                     <img class="image" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="">
                 </a>
                 <ul class="feat-show inner-ul">
-                    <li class="inner-li"><a class="inner-a">A</a></li>
-                    <li class="inner-li"><a class="inner-a">B</a></li>
-                    <li class="inner-li"><a class="inner-a">C</a></li>
-                    <li class="inner-li"><a class="inner-a">D</a></li>
+                    <li class="inner-li"><a class="inner-a">Chapter 7</a></li>
+                    <li class="inner-li"><a class="inner-a">Chapter 8</a></li>
+                    <li class="inner-li"><a class="inner-a">Chapter 9</a></li>
                 </ul>
             </li>
         </ul>
     </nav>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <!-- Chapters -->
     <section class="section-1">
         <div class="container-fluid">
+            <!-- Basics -->
             <div class="row" id="Basics">
                 <div class="col-12">
                     <h1>Basics <span class="subheader">- for beginners</span></h1>
                     <hr>
                 </div>
             </div>
-            <!-- Chapter 1.1 -->
-            <div id="IntroductiontoPython">
+            <!-- Quickstart -->
+            <div id="Quickstart">
                 <div class="row first">
                     <div class="col-6">
-                        <h2>Introduction to Python</h2>
+                        <h2>Quickstart</h2>
                     </div>
                     <div class="col-6">
                         <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
@@ -159,71 +160,17 @@
                 <div class="row rest">
                     <div class="col-12">
                         <span class="text">
-                            <p>Python is a popular programming language. It was created by Guido van Rossum, and
-                                released in 1991.</p>
-
-                            <p>It is used for:</p>
-
-                            <ul style="padding-left:2%;">
-                                <li>web development (server-side),</li>
-                                <li>software development,</li>
-                                <li>mathematics,</li>
-                                <li>system scripting.</li>
-                            </ul>
-                            <p>What can Python do?</p>
-                            <ul style="padding-left:2%;">
-                                <li>Python can be used on a server to create web applications.</li>
-                                <li>Python can be used alongside software to create workflows.</li>
-                                <li>Python can connect to database systems. It can also read and modify files. </li>
-                                <li>Python can be used to handle big data and perform complex mathematics.</li>
-                                <li>Python can be used for rapid prototyping, or for production-ready software
-                                    development.</li>
-                            </ul>
-
-
-                            <p>Why Python?</p>
-                            <ul style="padding-left:2%;">
-                                <li>Python works on different platforms (Windows, Mac, Linux, Raspberry Pi, etc).</li>
-                                <li>Python has a simple syntax similar to the English language.</li>
-                                <li>Python has syntax that allows developers to write programs with fewer lines than
-                                    some other programming languages.</li>
-                                <li>Python runs on an interpreter system, meaning that code can be executed as soon as
-                                    it is written. This means that prototyping can be very quick.</li>
-                                <li>Python can be treated in a procedural way, an object-oriented way or a functional
-                                    way.</li>
-                            </ul>
-
-                            <p> Good to know</p>
-                            <ul style="padding-left:2%;">
-                                <li>The most recent major version of Python is Python 3, which we shall be using in this
-                                    tutorial. However, Python 2, although not being updated with anything other than
-                                    security updates, is still quite popular.
-                                </li>
-                                <li> In this tutorial Python will be written in a text editor. It is possible to write
-                                    Python in an Integrated Development Environment, such as Thonny, Pycharm, Netbeans
-                                    or Eclipse which are particularly useful when managing larger collections of Python
-                                    files.
-                                </li>
-                                <li>Python Syntax compared to other programming languages.</li>
-                                <li>Python was designed for readability, and has some similarities to the English
-                                    language with influence from mathematics.</li>
-                                <li>Python uses new lines to complete a command, as opposed to other programming
-                                    languages which often use semicolons or parentheses.</li>
-                                <li>Python relies on indentation, using whitespace, to define scope; such as the scope
-                                    of loops, functions and classes. Other programming languages often use
-                                    curly-brackets for this purpose.</li>
-                            </ul>
-                                <button class="button "> </button>
+                            <button class="button"> </button>
                         </span>
                     </div>
                 </div>
             </div>
             <br>
-            <!-- Chapter 1.2 -->
-            <div id="2">
+            <!-- Chapter 1 -->
+            <div id="Chapter1">
                 <div class="row first">
                     <div class="col-6">
-                        <h2>Advanced</h2>
+                        <h2>Chapter 1: Variables,Data types,Operators</h2>
                     </div>
                     <div class="col-6">
                         <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
@@ -231,38 +178,18 @@
                 </div>
                 <div class="row rest">
                     <div class="col-12">
-                        <span class="text">CSS is designed primarily to enable the separation of
-                            document content from document presentation, including aspects such as the layout, colors,
-                            and fonts. This separation can improve content accessibility, provide more flexibility and
-                            control in the specification of presentation characteristics, enable multiple HTML pages to
-                            share formatting by specifying the relevant CSS in a separate .css file, and reduce
-                            complexity and repetition in the structural content.
-                            Separation of formatting and content makes it possible to present the same markup page in
-                            different styles for different rendering methods, such as on-screen, in print, by voice (via
-                            speech-based browser or screen reader), and on Braille-based tactile devices. It can also
-                            display the web page differently depending on the screen size or viewing device. Readers can
-                            also specify a different style sheet, such as a CSS file stored on their own computer, to
-                            override the one the author specified.
-                            Changes to the graphic design of a document (or hundreds of documents) can be applied
-                            quickly and easily, by editing a few lines in the CSS file they use, rather than by changing
-                            markup in the documents.
-                            The CSS specification describes a priority scheme to determine which style rules apply if
-                            more than one rule matches against a particular element. In this so-called cascade,
-                            priorities (or weights) are calculated and assigned to rules, so that the results are
-                            predictable.
-                            The CSS specifications are maintained by the World Wide Web Consortium (W3C). Internet media
-                            type (MIME type) text/css is registered for use with CSS by RFC 2318 (March 1998). The W3C
-                            operates a free CSS validation service for CSS documents.
+                        <span class="text">
+                            <button class="button"> </button>
                         </span>
                     </div>
                 </div>
             </div>
             <br>
-            <!-- Chapter 1.3 -->
-            <div id="3">
+            <!-- Chapter 2 -->
+            <div id="Chapter2">
                 <div class="row first">
                     <div class="col-6">
-                        <h2>Expert</h2>
+                        <h2>Chapter 2: String, Numbers, Boolean</h2>
                     </div>
                     <div class="col-6">
                         <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
@@ -270,48 +197,198 @@
                 </div>
                 <div class="row rest">
                     <div class="col-12">
-                        <span class="text">CSS is designed primarily to enable the separation of
-                            document content from document presentation, including aspects such as the layout, colors,
-                            and fonts. This separation can improve content accessibility, provide more flexibility and
-                            control in the specification of presentation characteristics, enable multiple HTML pages to
-                            share formatting by specifying the relevant CSS in a separate .css file, and reduce
-                            complexity and repetition in the structural content.
-                            Separation of formatting and content makes it possible to present the same markup page in
-                            different styles for different rendering methods, such as on-screen, in print, by voice (via
-                            speech-based browser or screen reader), and on Braille-based tactile devices. It can also
-                            display the web page differently depending on the screen size or viewing device. Readers can
-                            also specify a different style sheet, such as a CSS file stored on their own computer, to
-                            override the one the author specified.
-                            Changes to the graphic design of a document (or hundreds of documents) can be applied
-                            quickly and easily, by editing a few lines in the CSS file they use, rather than by changing
-                            markup in the documents.
-                            The CSS specification describes a priority scheme to determine which style rules apply if
-                            more than one rule matches against a particular element. In this so-called cascade,
-                            priorities (or weights) are calculated and assigned to rules, so that the results are
-                            predictable.
-                            The CSS specifications are maintained by the World Wide Web Consortium (W3C). Internet media
-                            type (MIME type) text/css is registered for use with CSS by RFC 2318 (March 1998). The W3C
-                            operates a free CSS validation service for CSS documents.
+                        <span class="text">
+                            <button class="button"> </button>
                         </span>
                     </div>
                 </div>
             </div>
+            <br>
+            <!-- Chapter 3 -->
+            <div id="Chapter3">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Chapter 3: Conditions and If Statements</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">
+                            <button class="button"> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <!-- Advanced -->
             <div class="row" id="Advanced">
                 <div class="col-12">
                     <h1>Advanced <span class="subheader">- for intermediates</span></h1>
                     <hr>
                 </div>
             </div>
+            <br>
+            <!-- Chapter 4 -->
+            <div id="Chapter4">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Chapter 4: Lists and Arrays</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">
+                            <button class="button"> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- Chapter 5 -->
+            <div id="Chapter5">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Chapter 5: For loops</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">
+                            <button class="button"> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- Chapter 6 -->
+            <div id="Chapter6">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Chapter 6: While loops</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">
+                            <button class="button"> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <!-- Expert -->
             <div class="row" id="Expert">
                 <div class="col-12">
                     <h1>Expert <span class="subheader">- for experts</span></h1>
                     <hr>
                 </div>
             </div>
+            <br>
+            <!-- Chapter 7 -->
+            <div id="Chapter7">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Chapter 7: Functions and Lamdas</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">
+                            <button class="button"> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- Chapter 8 -->
+            <div id="Chapter8">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Chapter 8: Classes and Objects</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">
+                            <button class="button"> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- Chapter 9 -->
+            <div id="Chapter9">
+                <div class="row first">
+                    <div class="col-6">
+                        <h2>Chapter 9: Inheritance</h2>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12">
+                        <span class="text">
+                            <button class="button"> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </section>
+    <script>
+        chapters='{{chapters}}';
+        all_chapters=  $.map($(".section-1").children('.container-fluid').children(), div => div.id);
 
+        for(let i = 0; i < all_chapters.length; i++){ 
+            if (all_chapters[i]=="" || all_chapters[i]=="Basics" || all_chapters[i]=="Advanced" || all_chapters[i]=="Expert"){
+                all_chapters.splice(i,1)
+            }
+            if (all_chapters[i]==""){
+                all_chapters.splice(i,1)
+            }
+        }   
+          chapters=Array.from(chapters).splice(0,1);
+          chapters.pop();
+          var elmts = Array.from(all_chapters).filter(f => !chapters.includes(f));
+          elmts.splice(0,1);
+          for(let i = 0; i < elmts.length; i++){ 
+              $('#'+elmts[i]).children().addClass('disabled');
+              $('#'+elmts[i]).children('.first').children().eq(1).children('img.right').attr('src',"{{ url_for('static', filename='images/lock.png') }}").addClass("disable");
+
+          }
+
+    </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

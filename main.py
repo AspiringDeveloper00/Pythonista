@@ -1,9 +1,9 @@
-from flask import Flask, render_template,url_for, session, flash,redirect, request
+from flask import Flask, render_template,url_for, session, flash,redirect, request, jsonify
 import os,hashlib
 from base64 import b64encode
 from flaskext.mysql import MySQL
 from matplotlib.style import use
-
+ 
 app = Flask(__name__)
 
 
@@ -36,17 +36,15 @@ def login():
         else:
             return render_template("login.html")
     else:
-        email=request.form['loginemail']
-        password=request.form['loginPassword']
+        email=request.form['email']
+        password=request.form['password']
         connection=mysql.connect()
         cursor=connection.cursor()
-        cursor.execute('select email,password,salt,username,level,age from users_info')
+        cursor.execute('select email,password,salt,username,level,age,id from users_info')
         connection.close()
         records = cursor.fetchall()
         exist=False
         for row in records:
-            print(email,row[0])
-            print(email==row[0])
             if email==row[0]:
                 exist=True
                 hex_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), row[2], 10000).hex()
@@ -54,23 +52,19 @@ def login():
                     session['username']=row[3]
                     session['level']=row[4]
                     session['age']=row[5]
-                    flash(f"Welcome back {row[3]}!",'success')
-                    return redirect(url_for("home"))
+                    session['id']=row[6]
+                    return jsonify({'success':f"Welcome back {row[3]}!"})
         if exist==False:
-            print("err")
-            flash('An account with that email does not exist!', 'error')
-            return redirect(url_for("login"))
+            return jsonify({'error':'An account with that email does not exist!'})
         else:
-            print("err meh")
-            flash('The given password is wrong, try again!', 'error')
-            return redirect(url_for("login"))
+            return jsonify({'error':'The given password is wrong, try again!'})
 
 
             
 @app.route('/signup', methods=['POST'])
 def signup():
     username=request.form['username']
-    email=request.form['emailAdress']
+    email=request.form['email']
     password=request.form['password']
     level=request.form['level']
     age=request.form['age']
@@ -80,21 +74,20 @@ def signup():
     records = cursor.fetchall()
     for row in records:
         if username==row[0]:
-            flash('There is already a user with the same username, try logging in!','info')
-            return redirect(url_for("login"))
+            return jsonify({'info':'There is already a user with the same username, try logging in!'})
         elif email==row[1]:
-            flash('There is already a user with the same email, try logging in!','info')
-            return redirect(url_for("login"))
+            return jsonify({'info':'There is already a user with the same email, try logging in!'})
     salt = os.urandom(32)
     hex_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 10000).hex()
     cursor.execute('insert into users_info (username,email,password,salt,level,age) values (%s,%s,%s,%s,%s,%s)',(username,email,hex_hash,salt,level,age))
     connection.commit()
     connection.close()
+    session['id']=id
     session['username']=username
     session['level']=level
     session['age']=age
-    flash(f"Welcome {username}!",'success')
-    return redirect(url_for("home"))
+    return jsonify({'success':f"Welcome back {username}!"})
+
 
 @app.route('/profile', methods=['GET'])
 def logout():
@@ -108,12 +101,40 @@ def logout():
 @app.route('/chapters', methods=['GET','POST'])
 def chapters():
     if request.method=="GET":
-        return render_template('chapters.html')
+        if 'username' in session:
+            connection=mysql.connect()
+            cursor=connection.cursor()
+            cursor.execute('select chapter_name from chapters_info where id=\''+str(session['id'])+'\'')
+            records = cursor.fetchall()
+            connection.close()
+            completed=[]
+            if len(records)!=0:
+                for row in records:
+                    completed.append(row[0])
+            return render_template('chapters.html',chapters=completed)
+        else:
+            flash("You have to log in or create an account first, to access our learning materials!",'info')
+            return redirect(url_for("login"))
+    else:
+        connection=mysql.connect()
+        cursor=connection.cursor()
+        cursor.execute('insert into chapters_info (id,chapter_name) values (%s,%s)'+(str(session['id']),str(request.form['chapter'])))
+        connection.commit()
+        connection.close()
+        return jsonify({'success':"completed"})
+        
+
     
+
+
+
 @app.route('/python', methods=['GET'])
 def python():
     if request.method=="GET":
         return render_template('python.html')
+
+
+
 
 if __name__ == '__main__':
  app.run(debug=True)

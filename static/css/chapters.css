@@ -286,3 +286,11 @@ hr {
         transform: rotate(360deg);
    }
 }
+
+.disabled{
+    background-color: rgb(87, 85, 85);
+}
+
+.disable{
+    pointer-events: none;
+}

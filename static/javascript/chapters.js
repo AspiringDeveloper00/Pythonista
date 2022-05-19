@@ -43,12 +43,16 @@ $(document).ready(function () {
     });
 });
 
+$(".right").hover(function () {
+    $(this).css('cursor', 'pointer');
+});
+
 $(".inner-li").click(function () {
     move = $('#' + $(this).children('.inner-a').text().replace(/ /g, '')).children('div.row.first').children().eq(1).children('img.right');
-    $('.text').not( move.parent().parent().siblings('.rest').children('.col-12').children('.text')).slideUp();
+    $('.text').not(move.parent().parent().siblings('.rest').children('.col-12').children('.text')).slideUp();
     $('.right').not(move).removeClass('rotate')
     $([document.documentElement, document.body]).animate({
-        scrollTop: $('#' + $(this).children('.inner-a').text().replace(/ /g, '')).offset().top-100
+        scrollTop: $('#' + $(this).children('.inner-a').text().replace(/ /g, '')).offset().top - 100
     });
     $('.btn').removeClass("click");
     $('.sidebar').removeClass("show");
@@ -58,4 +62,35 @@ $(".inner-li").click(function () {
 
 
 });
+
+
+function validate() {
+    $(this).removeClass("onclic");
+    $(this).addClass("validate");
+}
+function callback() {
+
+    $(this).removeClass("validate");
+}
+
+
+$('.button').click(function () {
+    $(this).addClass("onclic");
+
+    completed = $(this).parent().parent().parent().parent().attr('id');
+    $.ajax({
+        data: {
+            chapter: completed
+        },
+        type: 'POST',
+        url: '/chapters'
+    })
+        .done(function (data) {
+            if (data.success) {
+                $(this).queue(validate).queue(callback).attr('disabled', 'disabled').css('pointer-events', 'none');   
+            }
+
+        });
+
+})
 
