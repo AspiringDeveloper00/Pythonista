@@ -378,19 +378,14 @@
     {%endfor%}
     <script>
         all_chapters = $.map($(".section-1").children('.container-fluid').children(), div => div.id);
-
         for (let i = 0; i < all_chapters.length; i++) {
             if (all_chapters[i] == "Basics" || all_chapters[i] == "Advanced" || all_chapters[i] == "Expert") {
                 all_chapters.splice(i, 1)
             }
 
         }
-        console.log(chapters)
-        console.log(all_chapters)
-
         var elmts = all_chapters.filter(f => !chapters.includes(f));
         elmts.splice(0, 1);
-        console.log(elmts);
         for (let i = 0; i < elmts.length; i++) {
             $('#' + elmts[i]).children().addClass('disabled');
             $('#' + elmts[i]).children('.first').children().eq(1).children('img.right').attr('src', "{{ url_for('static', filename='images/lock.png') }}").addClass("disable");
