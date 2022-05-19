@@ -13,10 +13,14 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/chapters.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/prism.css') }}">
+    <script src="{{ url_for('static', filename='javascript/prism.js') }}"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/base16/onedark.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
+    <script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chapters.css') }}">
 
 
 </head>
@@ -36,7 +40,7 @@
     {% endif %}
     {% endwith %}
 
-    
+
     <header>
         <nav class="navbar navbar-dark navbar-expand-sm fixed-top " id="primary-nav">
             <div class="container left">
@@ -160,6 +164,55 @@
                 <div class="row rest">
                     <div class="col-12">
                         <span class="text">
+                            <h5>How to run Python</h5>
+                            <hr class="style3">
+                            <p>Python is an interpreted programming language, this means that as a developer you write
+                                Python (.py) files in a text editor and then put those files into the python interpreter
+                                to be executed.</p>
+                            <p>Open Notepad, write print(“Hello,World”); </p>
+                            <p>Save your file with the name “helloworld.py”. Open your command line, navigate to the
+                                directory where you saved your file, and run:</p>
+                            <p class="imp">C:\Users\Yourname>python helloworld.py</p>
+                            <p>OR</p>
+                            <p>To test a short amount of code in python sometimes it is quickest and easiest not to
+                                write the code in a file. This is made possible because Python can be run as a command
+                                line itself.
+                                Type the following on the Windows, Mac or Linux command line:
+                            </p>
+                            <p class="imp">C:\Users\Your Name>python </p>
+                            <p>Or, if the "python" command did not work, you can try "py":
+                                From there you can write any python, including our hello world example:
+                            </p>
+                            <p class="imp">print("Hello, World!")</p>
+                            <p>Whenever you are done in the python command line, you can simply type the following to
+                                quit the python command line interface:</p>
+                            <p class="imp">Exit()</p><br>
+                            <h5>Indentation in Python</h5>
+                            <hr class="style3">
+                            <p>Indentation refers to the spaces at the beginning of a code line, and it’s very important
+                                for Python. Python uses indentation to indicate a block of code, and it will give you an
+                                error if you skip the indentation. The number of spaces is up to you as a programmer,
+                                the most common use is four, but it has to be at least one.</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"
+                                data-prismjs-copy-success="I've been copied!" >
+                                    if 5 > 2:
+                                     print("Five is greater than two!") 
+                                    if 5 > 2:
+                                     print("Five is greater than two!") 
+
+                                </code></pre>
+                                <p>You have to use the same number of spaces in the same block of code, otherwise Python will give you an <span style="color:#DA1212">error</span>:</p>
+                                <pre><code class="language-python" data-prismjs-copy="Copy me" data-prismjs-copy-success="I've been copied!">
+                                    if 5 > 2:
+                                      print("Five is greater than two!")
+                                                 print("Five is greater than two!")
+
+
+                                </code></pre>
+
+
+
+
                             <button class="button"> </button>
                         </span>
                     </div>
@@ -367,26 +420,26 @@
 
     </section>
     <script>
-        chapters='{{chapters}}';
-        all_chapters=  $.map($(".section-1").children('.container-fluid').children(), div => div.id);
+        chapters = '{{chapters}}';
+        all_chapters = $.map($(".section-1").children('.container-fluid').children(), div => div.id);
 
-        for(let i = 0; i < all_chapters.length; i++){ 
-            if (all_chapters[i]=="" || all_chapters[i]=="Basics" || all_chapters[i]=="Advanced" || all_chapters[i]=="Expert"){
-                all_chapters.splice(i,1)
+        for (let i = 0; i < all_chapters.length; i++) {
+            if (all_chapters[i] == "" || all_chapters[i] == "Basics" || all_chapters[i] == "Advanced" || all_chapters[i] == "Expert") {
+                all_chapters.splice(i, 1)
             }
-            if (all_chapters[i]==""){
-                all_chapters.splice(i,1)
+            if (all_chapters[i] == "") {
+                all_chapters.splice(i, 1)
             }
-        }   
-          chapters=Array.from(chapters).splice(0,1);
-          chapters.pop();
-          var elmts = Array.from(all_chapters).filter(f => !chapters.includes(f));
-          elmts.splice(0,1);
-          for(let i = 0; i < elmts.length; i++){ 
-              $('#'+elmts[i]).children().addClass('disabled');
-              $('#'+elmts[i]).children('.first').children().eq(1).children('img.right').attr('src',"{{ url_for('static', filename='images/lock.png') }}").addClass("disable");
+        }
+        chapters = Array.from(chapters).splice(0, 1);
+        chapters.pop();
+        var elmts = Array.from(all_chapters).filter(f => !chapters.includes(f));
+        elmts.splice(0, 1);
+        for (let i = 0; i < elmts.length; i++) {
+            $('#' + elmts[i]).children().addClass('disabled');
+            $('#' + elmts[i]).children('.first').children().eq(1).children('img.right').attr('src', "{{ url_for('static', filename='images/lock.png') }}").addClass("disable");
 
-          }
+        }
 
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

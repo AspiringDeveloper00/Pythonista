@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = '80204ac8e871415e2a9e22d04367c65b541a8dde5f7604c13642
 
 mysql = MySQL()
 app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'password'
+app.config['MYSQL_DATABASE_PASSWORD'] = '1234'
 app.config['MYSQL_DATABASE_DB'] = 'pythonista'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
