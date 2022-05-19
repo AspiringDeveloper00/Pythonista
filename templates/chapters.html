@@ -42,7 +42,7 @@
 
 
     <header>
-        <nav class="navbar navbar-dark navbar-expand-sm fixed-top " id="primary-nav">
+        <nav class="navbar navbar-dark navbar-expand-lg fixed-top " id="primary-nav">
             <div class="container left">
                 <a class="navbar-brand" id="logo" href="#">
                     <img src="{{ url_for('static', filename='images/logo-purple.png') }}" class="logo-icon" alt="">
@@ -201,7 +201,7 @@
                                      print("Five is greater than two!") 
 
                                 </code></pre>
-                                <p>You have to use the same number of spaces in the same block of code, otherwise Python will give you an <span style="color:#DA1212">error</span>:</p>
+                                <p>You have to use the same number of spaces in the same block of code, otherwise Python will give you an <span style="color:#DA1212">error!</span>:</p>
                                 <pre><code class="language-python" data-prismjs-copy="Copy me" data-prismjs-copy-success="I've been copied!">
                                     if 5 > 2:
                                       print("Five is greater than two!")
@@ -218,7 +218,7 @@
                     </div>
                 </div>
             </div>
-            <br>
+
             <!-- Chapter 1 -->
             <div id="Chapter1">
                 <div class="row first">
@@ -237,7 +237,7 @@
                     </div>
                 </div>
             </div>
-            <br>
+
             <!-- Chapter 2 -->
             <div id="Chapter2">
                 <div class="row first">
@@ -256,7 +256,7 @@
                     </div>
                 </div>
             </div>
-            <br>
+
             <!-- Chapter 3 -->
             <div id="Chapter3">
                 <div class="row first">
@@ -288,7 +288,7 @@
                     <hr>
                 </div>
             </div>
-            <br>
+
             <!-- Chapter 4 -->
             <div id="Chapter4">
                 <div class="row first">
@@ -307,7 +307,7 @@
                     </div>
                 </div>
             </div>
-            <br>
+
             <!-- Chapter 5 -->
             <div id="Chapter5">
                 <div class="row first">
@@ -326,7 +326,7 @@
                     </div>
                 </div>
             </div>
-            <br>
+
             <!-- Chapter 6 -->
             <div id="Chapter6">
                 <div class="row first">
@@ -359,7 +359,7 @@
                     <hr>
                 </div>
             </div>
-            <br>
+
             <!-- Chapter 7 -->
             <div id="Chapter7">
                 <div class="row first">
@@ -378,7 +378,7 @@
                     </div>
                 </div>
             </div>
-            <br>
+
             <!-- Chapter 8 -->
             <div id="Chapter8">
                 <div class="row first">
@@ -397,7 +397,7 @@
                     </div>
                 </div>
             </div>
-            <br>
+
             <!-- Chapter 9 -->
             <div id="Chapter9">
                 <div class="row first">
@@ -419,26 +419,38 @@
         </div>
 
     </section>
-    <script>
-        chapters = '{{chapters}}';
-        all_chapters = $.map($(".section-1").children('.container-fluid').children(), div => div.id);
 
+    <script>
+        chapters = []
+    </script>
+    {%for i in chapters%}
+    {{i}}
+    <script>
+        chapters.push('{{i}}')
+    </script>
+    {%endfor%}
+    <script>
+        all_chapters = $.map($(".section-1").children('.container-fluid').children(), div => div.id);
         for (let i = 0; i < all_chapters.length; i++) {
-            if (all_chapters[i] == "" || all_chapters[i] == "Basics" || all_chapters[i] == "Advanced" || all_chapters[i] == "Expert") {
+            if (all_chapters[i] == "Basics" || all_chapters[i] == "Advanced" || all_chapters[i] == "Expert") {
                 all_chapters.splice(i, 1)
             }
-            if (all_chapters[i] == "") {
-                all_chapters.splice(i, 1)
-            }
+
         }
-        chapters = Array.from(chapters).splice(0, 1);
-        chapters.pop();
-        var elmts = Array.from(all_chapters).filter(f => !chapters.includes(f));
+        var elmts = all_chapters.filter(f => !chapters.includes(f));
         elmts.splice(0, 1);
         for (let i = 0; i < elmts.length; i++) {
             $('#' + elmts[i]).children().addClass('disabled');
             $('#' + elmts[i]).children('.first').children().eq(1).children('img.right').attr('src', "{{ url_for('static', filename='images/lock.png') }}").addClass("disable");
+        }
 
+        var elmts = chapters.filter(f => all_chapters.includes(f));
+        if (elmts.length > 0) {
+            $('#Quickstart').children('.rest').children().eq(0).children('.text').children(".button").addClass("validate").attr('disabled', 'disabled').css('pointer-events', 'none');
+
+        }
+        for (let i = 0; i < elmts.length; i++) {
+            $('#' + elmts[i]).children('.rest').children().eq(0).children('.text').children(".button").addClass("validate").attr('disabled', 'disabled').css('pointer-events', 'none');
         }
 
     </script>
