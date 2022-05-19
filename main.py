@@ -3,6 +3,7 @@ import os,hashlib
 from base64 import b64encode
 from flaskext.mysql import MySQL
 from matplotlib.style import use
+import json
  
 app = Flask(__name__)
 
@@ -81,8 +82,10 @@ def signup():
     hex_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 10000).hex()
     cursor.execute('insert into users_info (username,email,password,salt,level,age) values (%s,%s,%s,%s,%s,%s)',(username,email,hex_hash,salt,level,age))
     connection.commit()
+    cursor.execute('select id from users_info where username='+username)
+    records=cursor.fetchall()
     connection.close()
-    session['id']=id
+    session['id']=records[0]
     session['username']=username
     session['level']=level
     session['age']=age
@@ -104,10 +107,10 @@ def chapters():
         if 'username' in session:
             connection=mysql.connect()
             cursor=connection.cursor()
-            cursor.execute('select chapter_name from chapters_info where id=\''+str(session['id'])+'\'')
+            cursor.execute('select chapter_name from chapters_info where id='+str(session['id']))
             records = cursor.fetchall()
             connection.close()
-            completed=[]
+            completed=[ ]
             if len(records)!=0:
                 for row in records:
                     completed.append(row[0])
@@ -118,7 +121,7 @@ def chapters():
     else:
         connection=mysql.connect()
         cursor=connection.cursor()
-        cursor.execute('insert into chapters_info (id,chapter_name) values (%s,%s)'+(str(session['id']),str(request.form['chapter'])))
+        cursor.execute('insert into chapters_info (id,chapter_name) values (%s,%s)',(session['id'],request.form['chapter']))
         connection.commit()
         connection.close()
         return jsonify({'success':"completed"})

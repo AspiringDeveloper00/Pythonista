@@ -41,6 +41,7 @@ $(document).ready(function () {
         }
 
     });
+    
 });
 
 $(".right").hover(function () {
@@ -75,7 +76,8 @@ function callback() {
 
 
 $('.button').click(function () {
-    $(this).addClass("onclic");
+    var $btn = $(this);
+    $btn.addClass("onclic");
 
     completed = $(this).parent().parent().parent().parent().attr('id');
     $.ajax({
@@ -87,7 +89,16 @@ $('.button').click(function () {
     })
         .done(function (data) {
             if (data.success) {
-                $(this).queue(validate).queue(callback).attr('disabled', 'disabled').css('pointer-events', 'none');   
+                $btn.delay(1500).queue(validate).queue(callback).attr('disabled', 'disabled').css('pointer-events', 'none'); 
+                if ($btn.parent().parent().parent().parent().next().attr('id') != "Basics" && $btn.parent().parent().parent().parent().next().attr('id') != "Advanced" && $btn.parent().parent().parent().parent().next().attr('id') != "Expert") {
+                    id = $btn.parent().parent().parent().parent().next().attr('id');
+                    console.log(id);
+                } else {
+                    id = $btn.parent().parent().parent().parent().next().next().attr('id');
+                    console.log(id);
+                }
+                $('#' + id).children().removeClass('disabled');
+                $('#' + id).children('.first').children().eq(1).children('img.right').attr('src', "../static/images/up-purple.png").removeClass("disable");  
             }
 
         });
