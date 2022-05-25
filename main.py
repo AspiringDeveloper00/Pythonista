@@ -1,14 +1,8 @@
-from operator import length_hint
-from turtle import right
 from flask import Flask, render_template, url_for, session, flash, redirect, request, jsonify
 import os
 import hashlib
-from base64 import b64encode
 from flaskext.mysql import MySQL
-from matplotlib.style import use
-import json
-
-from numpy import average
+import random
 from credentials import *
 app = Flask(__name__)
 
@@ -169,13 +163,8 @@ def chapters():
 @app.route('/tests', methods=['GET', 'POST'])
 def tests():
     if request.method == "POST":
-        chapter = request.form['chapter']
-        connection = mysql.connect()
-        cursor = connection.cursor()
-        cursor.execute(
-            'select * from test_questions where test_chapter='+chapter)
-        records = cursor.fetchall()
-        connection.close()
+        if 'username' in session:
+            return render_template('test.html')
     else:
         if 'username' in session and 'teacher' not in session:
             curr_test = request.args.get('test')
@@ -198,9 +187,11 @@ def tests():
                 if len(tests)+1 != curr_test_id[0][0]:
                     valid = False
                 if valid == True:
-                    
+                    cursor.execute('select * from tests_questions where test_name=%s',curr_test)
+                    questions=cursor.fetchall()
+                    questions=random.sample(questions,3)
                     connection.close()
-                    return render_template('test.html')
+                    return render_template('test.html',questions=questions)
                 else:
                     connection.close()
                     flash('You have no access to that test. You have to pass the previous ones first!', 'error')
