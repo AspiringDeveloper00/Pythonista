@@ -16,59 +16,66 @@
 
 
 <body>
-    
-  <header>
-    <nav class="navbar navbar-dark navbar-expand-lg  fixed-top " id="primary-nav">
-      <div class="container-fluid left">
-        <a class="navbar-brand" id="logo" href="#">
-          <img src="{{ url_for('static', filename='images/logo-purple.png') }}" class="logo-icon" alt="">
-          <span class="name-top"><b>Pythonista</b></span>
-        </a>
-        <button id="hamburger" class="navbar-toggler collapsed" type="button" data-toggle="collapse"
-          data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
-          aria-label="Toggle navigation">
-          <span id="span-1"> </span>
-          <span> </span>
-          <span id="span-3"> </span>
-        </button>
-        <div id="navbarCollapse" class="collapse navbar-collapse">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a href="index" class="nav-link nav-link-fade-up ">
-                Home
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="chapters" class="nav-link nav-link-fade-up">
-                Chapters
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="tests" class="nav-link nav-link-fade-up">
-                Tests
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="python" class="nav-link nav-link-fade-up active">
-                Why Python? | Install
-              </a>
-            </li>
-            <li class="nav-item">
-              {%if session['username']%}
-              <a href="profile" class="nav-link nav-link-fade-up">
-                Profile
-              </a>
-              {%else%}
-              <a href="login" class="nav-link nav-link-fade-up ">
-                Login
-              </a>
-              {%endif%}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
+
+    <header>
+        <nav class="navbar navbar-dark navbar-expand-lg  fixed-top " id="primary-nav">
+            <div class="container-fluid left">
+                <a class="navbar-brand" id="logo" href="#">
+                    <img src="{{ url_for('static', filename='images/logo-purple.png') }}" class="logo-icon" alt="">
+                    <span class="name-top"><b>Pythonista</b></span>
+                </a>
+                <button id="hamburger" class="navbar-toggler collapsed" type="button" data-toggle="collapse"
+                    data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span id="span-1"> </span>
+                    <span> </span>
+                    <span id="span-3"> </span>
+                </button>
+                <div id="navbarCollapse" class="collapse navbar-collapse">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a href="index" class="nav-link nav-link-fade-up ">
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="chapters" class="nav-link nav-link-fade-up">
+                                Chapters
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="tests" class="nav-link nav-link-fade-up">
+                                Tests
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="python" class="nav-link nav-link-fade-up active">
+                                Why Python? | Install
+                            </a>
+                        </li>
+                        {%if session['username']%}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Profile
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="profile">View Profile</a>
+                                <a class="dropdown-item" href="logout">Logout</a>
+                            </div>
+                        </li>
+                        {%else%}
+                        <li class="nav-item"></li>
+                        <a href="login" class="nav-link nav-link-fade-up ">
+                            Login
+                        </a>
+                        </li>
+                        {%endif%}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
     <section class="section-1">
         <div class="container-fluid">

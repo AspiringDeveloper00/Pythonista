@@ -129,7 +129,7 @@ $(document).ready(function () {
     $('form.signup-form').submit(function (event) {
         event.preventDefault();
         if (usernameError == true || emailError == true || passwordError == true || passConfirm == true || ageError == true) {
-            $('.username, .email, .pass, .passConfirm, .age, .level').blur();
+            $('.username, .email, .pass, .passConfirm, .age').blur();
         } else {
             signup();
         }
@@ -170,8 +170,12 @@ function login() {
                 $('.login').removeClass('switched').siblings('.signup').addClass('switched');
 
             } else if (data.success) {
-                localStorage['message'] = data.success;
-                $(location).prop('href', 'home')
+                if (data.teacher){
+                    $(location).prop('href', 'admin')
+                }else{
+                    localStorage['message'] = data.success;
+                    $(location).prop('href', 'home')
+                }
             }
         });
 
@@ -185,7 +189,6 @@ function signup() {
             password: $('#password').val(),
             email: $('#email').val(),
             age: $('#age').val(),
-            level: $('#level').val()
         },
         type: 'POST',
         url: '/signup'
@@ -197,8 +200,9 @@ function signup() {
                     text: data.info
                 });
             } else if (data.success) {
+                console.log("dasdsad")
                 localStorage['message'] = data.success;
-                window.location.href('/home');
+                window.location.href='/home';
             }
 
         });
