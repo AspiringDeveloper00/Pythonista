@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/questions.css') }}">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 
@@ -71,7 +73,7 @@
             </div>
         </nav>
     </header>
-    <form action="questions" class="form" method="post">
+    <form action="questions" id="form" class="form" method="post">
 
 
         <label for="question">Question:</label>

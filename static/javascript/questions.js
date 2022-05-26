@@ -157,7 +157,7 @@ $(document).ready(function () {
 });
 
 
-$('#submit').click(function(e){
+$('#form').submit(function(e){
     e.preventDefault();
     question=$('#question').val();
     test=$('#test').val();
@@ -191,10 +191,10 @@ $('#submit').click(function(e){
                     text: 'Please fill in all the required fields!'
                 });
             }else{
-                $(this).submit();
+                $(this).unbind('submit').submit()
             }
         }else{
-            $(this).submit();
+            $(this).unbind('submit').submit()
         }
     }
     
