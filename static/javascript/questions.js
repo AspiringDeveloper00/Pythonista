@@ -81,8 +81,7 @@ $('#chapter').on('change', function (e) {
     var select = $("#subchapter1")[0];
     var optionSelected1 = $("#test option:selected");
     var valueSelected1 = optionSelected1.val()
-    console.log(valueSelected1.slice(0,-5)!=valueSelected )
-    if (valueSelected1.slice(0,-5)!=valueSelected ){
+    if (valueSelected1.slice(0,-5)!=valueSelected && valueSelected1.slice(0,1)!='B' && valueSelected1.slice(0,1)!='A' && valueSelected1.slice(0,1)!='E'){
         $("#test option:selected").removeAttr("selected");
 
         $('#test option').eq(0).prop('selected', true);

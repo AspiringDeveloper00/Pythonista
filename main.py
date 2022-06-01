@@ -289,8 +289,7 @@ def questions():
         connection.commit()
         connection.close()
         flash('Successfully submitted!', 'success')
-        return render_template('questions.html')
-
+        return redirect(url_for("questions"))
 
 @app.route('/students', methods=['GET', 'POST'])
 def students():
