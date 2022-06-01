@@ -104,11 +104,9 @@ def chapters():
         if 'username' in session and 'teacher' not in session:
             connection = mysql.connect()
             cursor = connection.cursor()
-            cursor.execute(
-                'select chapter_name from chapters_users_info where user_id='+str(session['id']))
+            cursor.execute('select chapter_name from chapters_users_info where user_id=%s',(str(session['id'])))
             chapters = cursor.fetchall()
-            cursor.execute('select tests.test_name,score from tests inner join tests_users_info on tests.test_name=tests_users_info.test_name where user_id=' +
-                           str(session['id'])+' and score>50 order by tests.id;')
+            cursor.execute('select tests.test_name,score from tests inner join tests_users_info on tests.test_name=tests_users_info.test_name where user_id=%s and score>50 order by tests.id',(str(session['id'])))
             tests = cursor.fetchall()
             cursor.execute('select chapter_name from chapters order by id')
             all_chapters = cursor.fetchall()
