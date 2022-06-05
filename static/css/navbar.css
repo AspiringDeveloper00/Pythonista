@@ -197,10 +197,35 @@ header .navbar-toggler:not(.collapsed) span:nth-child(3) {
 }
 
 
+.dropdown-item:hover{
+  color: #8167a9 !important;
+  background-color: #14151A !important;
+  opacity: 1;
+}
 
+.show > .dropdown-menu {
+  max-height: 800px;
+  visibility: visible;
+}
+  
+.dropdown-menu {
+  display: block;
+  max-height: 0;
+  visibility: hidden;
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
+  background-color: #14151A !important;
+}
 
+.dropdown-item {
+  text-align: center !important;
+  color: white;
+  opacity: 0.5;
+}
 
-
+.dropdown{
+  overflow: visible;
+}
 @media (min-width:576px) and (max-width:610px) {
   .nav-link {
     font-size: 14px;

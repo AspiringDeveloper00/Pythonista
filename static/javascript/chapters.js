@@ -31,7 +31,7 @@ $('.inner-li').mouseout(
 
 
 $(document).ready(function () {
-    $('.text').slideUp();
+    //$('.text').slideUp();
     $(".button").each(function (index) {
         $(this).attr('name', $(this).parent().parent().parent().parent().attr('id'))
     });
@@ -40,11 +40,12 @@ $(document).ready(function () {
     });
     $(".right").click(function () {
         if ($(this).hasClass('rotate')) {
-            $(this).removeClass('rotate'); ''
+            $(this).removeClass('rotate');
             $(this).parent().parent().siblings('.rest').children('.col-12').children('.text').slideUp();
         } else {
             $(this).addClass('rotate');
             $(this).parent().parent().siblings('.rest').children('.col-12').children('.text').slideDown();
+           
         }
 
     });
@@ -62,10 +63,11 @@ $(".inner-li").click(function () {
     $('.btn').removeClass("click");
     $('.sidebar').removeClass("show");
     $('.image2').removeClass("rotate");
-    if (!($('#' + $(this).children('.inner-a').text().replace(/ /g, '')).children().eq(0).hasClass('disabled')) ){
+    if (!($('#' + $(this).children('.inner-a').text().replace(/ /g, '')).children().eq(0).hasClass('disabled'))) {
         move.parent().parent().siblings('.rest').children('.col-12').children('.text').slideDown();
         move.addClass('rotate');
-    }else{
+
+    } else {
         animateCSS('#' + $(this).children('.inner-a').text().replace(/ /g, ''), 'shakeX');
     }
     $([document.documentElement, document.body]).animate({
@@ -114,8 +116,8 @@ $('.button').click(function () {
 })
 
 
-function redirect(a){
-    window.location.href="tests?test="+a.name
+function redirect(a) {
+    window.location.href = "tests?test=" + a.name
 }
 
 
@@ -138,16 +140,16 @@ function format(chapters, tests, all_chapters, all_tests) {
     }
 
     for (let i = 1; i < all_chapters.length; i++) {
-        if (!tests.includes(all_chapters[i]+"_test") && !tests.includes(all_chapters[i-1]+"_test")){
+        if (!tests.includes(all_chapters[i] + "_test") && !tests.includes(all_chapters[i - 1] + "_test")) {
             $('#' + all_chapters[i]).children().addClass('disabled');
             $('#' + all_chapters[i]).children('.first').children().eq(1).children('img.right').attr('src', "../static/images/lock.png").addClass("disable");
         }
     }
 
-    for (let i = 0; i < tests.length; i++){
-        $('#'+tests[i].slice(0,-5)).children().eq(1).children().children().children('.test-btn').html("Test taken").attr('disabled', 'disabled').css('pointer-events', 'none');
+    for (let i = 0; i < tests.length; i++) {
+        $('#' + tests[i].slice(0, -5)).children().eq(1).children().children().children('.test-btn').html("Test taken").attr('disabled', 'disabled').css('pointer-events', 'none');
     }
-    
+
 
 
 }

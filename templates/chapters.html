@@ -35,12 +35,31 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
+    {{message[:5]}}
+    {% if message[:5]== 'Wanna' %}
+    <script>
+        Swal.fire({
+            icon: '{{category}}',
+            text: '{{message}}',
+            showDenyButton: true,
+            confirmButtonText: 'Of course yeah!',
+            denyButtonText: `Nope, let me study!`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Saved!', '', 'success')
+            } else if (result.isDenied) {
+                Swal.fire('Changes are not saved', '', 'info')
+            }
+        })
+    </script>
+    {%else%}
     <script>
         Swal.fire({
             icon: '{{category}}',
             text: '{{message}}'
         });
     </script>
+    {% endif %}
     {% endfor %}
     {% endif %}
     {% endwith %}
@@ -761,9 +780,18 @@
                     </div>
                 </div>
                 <div class="row rest">
-                    <div class="col-12">
+                    <div class="col-12 text-center">
                         <span class="text">
-                            <button class="test-btn" onclick="redirect(this)">Practice test</button>
+                            <h4>It's time to get a reward! Complete this evaluation test that will challenge you with
+                                questions from the previous chapters and you will get an awesome badge! Take your time
+                                and be very careful when answering
+                                the questions! After you finish the exam, if you pass, you can show off your badge,
+                                located in your profile page. If, on the other hand fail, don't worry! You can study a
+                                bit more and re-take the test! Second chances are very important when learning a new
+                                skill! </h4>
+                            <img src="{{ url_for('static', filename='images/basics.png') }}" alt=""
+                                style="width: 300px;margin:0 auto;margin-bottom: 100px;">
+                            <button class="test-btn" onclick="redirect(this)">Evaluation test</button>
                             <button class="button"> </button>
                         </span>
                     </div>
@@ -1048,26 +1076,6 @@
                 <div class="row rest">
                     <div class="col-12">
                         <span class="text">
-                            <button class="test-btn" onclick="redirect(this)">Practice test</button>
-                            <button class="button"> </button>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-
-            <div id="AdvancedTest">
-                <div class="row first">
-                    <div class="col-6">
-                        <h3>Advanced Evaluation Test</h3>
-                    </div>
-                    <div class="col-6">
-                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
-                    </div>
-                </div>
-                <div class="row rest">
-                    <div class="col-12">
-                        <span class="text">
                             <h4>Intro</h4>
                             <p>With the<span class="imp"> while </span>loop we can execute a set of statements as long
                                 as a condition is true.</p>
@@ -1115,6 +1123,37 @@
                                  
                             </code></pre><br>
                             <button class="test-btn" onclick="redirect(this)">Practice test</button>
+                            <button class="button"> </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="AdvancedTest">
+                <div class="row first">
+                    <div class="col-6">
+                        <h3>Advanced Evaluation Test</h3>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
+                </div>
+                <div class="row rest">
+                    <div class="col-12 text-center">
+                        <span class="text">
+                            <h4>Great job, you are almost halfway toward completing this course! We know it isn't that
+                                easy so we will reward you with a badge! Complete this evaluation test that will
+                                challenge you with
+                                questions from the previous chapters and you will get it! Take your time
+                                and be very careful when answering
+                                the questions! After you finish the exam, if you pass, you can show off your badge,
+                                located in your profile page. If, on the other hand fail, don't worry! You can study a
+                                bit more and re-take the test! Second chances are very important when learning a new
+                                skill! </h4>
+                            <img src="{{ url_for('static', filename='images/intermediate.png') }}" alt=""
+                                style="width: 300px;margin:0 auto;margin-bottom: 100px;">
+                            <button class="test-btn" onclick="redirect(this)">Evaluation test</button>
                             <button class="button"> </button>
                         </span>
                     </div>
@@ -1382,160 +1421,173 @@
                 <div class="row rest">
                     <div class="col-12">
                         <span class="text">
+                            <h5>Python Inheritance</h5>
+                            <p>Inheritance allows us to define a class that inherits all the methods and properties from
+                                <span class="imp">another</span> class.
+                            </p>
+                            <p><span class="imp">Parent class</span> is the class <span class="imp">being inherited
+                                    from</span>>, also called base class.</p>
+                            <p><span class="imp">Child class</span> is the class that <span class="imp">inherits
+                                    from</span> another class, also called derived class.</p>
+                            <h4>Create a Parent Class</h4>
+                            <p>Any class can be a parent class, so the syntax is the same as creating any other class:
+                            </p>
+                            <p class="imp">Example</p>
+                            <p>Create a class named Person, with firstname and lastname properties, and a printname
+                                method:</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
+                                    class Person:
+                                      def __init__(self, fname, lname):
+                                        self.firstname = fname
+                                        self.lastname = lname
+    
+                                      def printname(self):
+                                        print(self.firstname, self.lastname)
+    
+                                    #Use the Person class to create an object, and then execute the printname method:
+    
+                                    x = Person("John", "Doe")
+                                    x.printname()
+    
+                                    </code></pre>
+                            <br>
+                            <h5>Create a Child Class</h5>
+                            <p>To create a class that inherits the functionality from another class, send the parent
+                                class as a parameter when creating the child class:
+                            </p>
+                            <p class="imp">Example</p>
+                            <p>Create a class named Student, which will inherit the properties and methods from the
+                                Person class:</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
+                                    class Student(Person):
+                                    pass
+                                    </code></pre>
+                            <p>Now the Student class has the same properties and methods as the Person class.</p>
+                            <p class="imp">Example</p>
+                            <p>Use the Student class to create an object, and then execute the printname method:</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
+                                    x = Student("Mike", "Olsen")
+                                    x.printname()
+    
+                                    </code></pre>
+                            <br>
+                            <h4>Add the __init__() Function</h4>
+                            <p>So far we have created a child class that inherits the properties and methods from its
+                                parent.</p>
+                            <p>We want to add the __init__() function to the child class (instead of the pass keyword).
+                            </p>
+                            <p class="imp">Example</p>
+                            <p>Add the __init__() function to the Student class:</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
+                                    class Student(Person):
+                                      def __init__(self, fname, lname):
+                                        #add properties etc.
+                                    </code></pre>
+                            <p>When you add the __init__() function, the child class will no longer inherit the parent's
+                                __init__() function.</p>
+                            <p><span style="color:#DA1212">Note:</span>The child's __init__() function <span
+                                    class="imp">overrides</span> the inheritance of the parent's __init__() function.
+                            </p>
+                            <p>To keep the inheritance of the parent's __init__() function, add a call to the parent's
+                                __init__() function:</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
+                                    class Student(Person):
+                                      def __init__(self, fname, lname):
+                                         Person.__init__(self, fname, lname)
+    
+                                    </code></pre>
+                            <br>
+                            <h5>Use the super() Function</h5>
+                            <p>Python also has a <span lass="imp">super()</span> function that will make the child class
+                                inherit all the methods and properties from its parent:</p>
+                            <p class="imp">Example</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
+                                        class Student(Person):
+                                           def __init__(self, fname, lname):
+                                              super().__init__(fname, lname)
+    
+                                        </code></pre>
+                            <h5>Add Properties</h5>
+                            <p class="imp">Example</p>
+                            <p>Add a property called graduationyear to the Student class:</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
+                                         
+                                          class Student(Person):
+                                             def __init__(self, fname, lname):
+                                               super().__init__(fname, lname)
+                                               self.graduationyear = 2019
+    
+                                            </code></pre>
+                            <p>In the example below, the year 2019 should be a variable, and passed into the Student
+                                class when creating student objects. To do so, add another parameter in the __init__()
+                                function:</p>
+                            <p class="imp">Example</p>
+                            <p>Add a year parameter, and pass the correct year when creating objects:</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
+                                         
+                                    class Student(Person):
+                                      def __init__(self, fname, lname, year):
+                                        super().__init__(fname, lname)
+                                        self.graduationyear = year
+                                  
+                                    x = Student("Mike", "Olsen", 2019)
+                                            </code></pre><br>
+                            <h5>Add Methods</h5>
+                            <p class="imp">Example</p>
+                            <p>Add a method called welcome to the Student class:</p>
+                            <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
+                                         
+                                    class Student(Person):
+                                      def __init__(self, fname, lname, year):
+                                        super().__init__(fname, lname)
+                                        self.graduationyear = year
+                                  
+                                      def welcome(self):
+                                        print("Welcome", self.firstname, self.lastname, "to the class of", self.graduationyear)
+                                   
+                                            </code></pre>
+                            <p>If you add a method in the child class with the same name as a function in the parent
+                                class, the inheritance of the parent method will be overridden.</p>
                             <button class="test-btn" onclick="redirect(this)">Practice test</button>
                             <button class="button"> </button>
                         </span>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="ExpertTest">
-            <div class="row first">
-                <div class="col-6">
-                    <h3>Expert Evaluation Test</h3>
+
+            <div id="ExpertTest">
+                <div class="row first">
+                    <div class="col-6">
+                        <h3>Expert Evaluation Test</h3>
+                    </div>
+                    <div class="col-6">
+                        <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
+                    </div>
                 </div>
-                <div class="col-6">
-                    <img class="right" src="{{ url_for('static', filename='images/up-purple.png') }}" alt="logo" />
-                </div>
-            </div>
-            <div class="row rest">
-                <div class="col-12">
-                    <span class="text">
-                        <h5>Python Inheritance</h5>
-                        <p>Inheritance allows us to define a class that inherits all the methods and properties from
-                            <span class="imp">another</span> class.
-                        </p>
-                        <p><span class="imp">Parent class</span> is the class <span class="imp">being inherited
-                                from</span>>, also called base class.</p>
-                        <p><span class="imp">Child class</span> is the class that <span class="imp">inherits
-                                from</span> another class, also called derived class.</p>
-                        <h4>Create a Parent Class</h4>
-                        <p>Any class can be a parent class, so the syntax is the same as creating any other class:
-                        </p>
-                        <p class="imp">Example</p>
-                        <p>Create a class named Person, with firstname and lastname properties, and a printname
-                            method:</p>
-                        <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
-                                class Person:
-                                  def __init__(self, fname, lname):
-                                    self.firstname = fname
-                                    self.lastname = lname
-
-                                  def printname(self):
-                                    print(self.firstname, self.lastname)
-
-                                #Use the Person class to create an object, and then execute the printname method:
-
-                                x = Person("John", "Doe")
-                                x.printname()
-
-                                </code></pre>
-                        <br>
-                        <h5>Create a Child Class</h5>
-                        <p>To create a class that inherits the functionality from another class, send the parent
-                            class as a parameter when creating the child class:
-                        </p>
-                        <p class="imp">Example</p>
-                        <p>Create a class named Student, which will inherit the properties and methods from the
-                            Person class:</p>
-                        <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
-                                class Student(Person):
-                                pass
-                                </code></pre>
-                        <p>Now the Student class has the same properties and methods as the Person class.</p>
-                        <p class="imp">Example</p>
-                        <p>Use the Student class to create an object, and then execute the printname method:</p>
-                        <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
-                                x = Student("Mike", "Olsen")
-                                x.printname()
-
-                                </code></pre>
-                        <br>
-                        <h4>Add the __init__() Function</h4>
-                        <p>So far we have created a child class that inherits the properties and methods from its
-                            parent.</p>
-                        <p>We want to add the __init__() function to the child class (instead of the pass keyword).
-                        </p>
-                        <p class="imp">Example</p>
-                        <p>Add the __init__() function to the Student class:</p>
-                        <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
-                                class Student(Person):
-                                  def __init__(self, fname, lname):
-                                    #add properties etc.
-                                </code></pre>
-                        <p>When you add the __init__() function, the child class will no longer inherit the parent's
-                            __init__() function.</p>
-                        <p><span style="color:#DA1212">Note:</span>The child's __init__() function <span
-                                class="imp">overrides</span> the inheritance of the parent's __init__() function.
-                        </p>
-                        <p>To keep the inheritance of the parent's __init__() function, add a call to the parent's
-                            __init__() function:</p>
-                        <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
-                                class Student(Person):
-                                  def __init__(self, fname, lname):
-                                     Person.__init__(self, fname, lname)
-
-                                </code></pre>
-                        <br>
-                        <h5>Use the super() Function</h5>
-                        <p>Python also has a <span lass="imp">super()</span> function that will make the child class
-                            inherit all the methods and properties from its parent:</p>
-                        <p class="imp">Example</p>
-                        <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
-                                    class Student(Person):
-                                       def __init__(self, fname, lname):
-                                          super().__init__(fname, lname)
-
-                                    </code></pre>
-                        <h5>Add Properties</h5>
-                        <p class="imp">Example</p>
-                        <p>Add a property called graduationyear to the Student class:</p>
-                        <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
-                                     
-                                      class Student(Person):
-                                         def __init__(self, fname, lname):
-                                           super().__init__(fname, lname)
-                                           self.graduationyear = 2019
-
-                                        </code></pre>
-                        <p>In the example below, the year 2019 should be a variable, and passed into the Student
-                            class when creating student objects. To do so, add another parameter in the __init__()
-                            function:</p>
-                        <p class="imp">Example</p>
-                        <p>Add a year parameter, and pass the correct year when creating objects:</p>
-                        <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
-                                     
-                                class Student(Person):
-                                  def __init__(self, fname, lname, year):
-                                    super().__init__(fname, lname)
-                                    self.graduationyear = year
-                              
-                                x = Student("Mike", "Olsen", 2019)
-                                        </code></pre><br>
-                        <h5>Add Methods</h5>
-                        <p class="imp">Example</p>
-                        <p>Add a method called welcome to the Student class:</p>
-                        <pre><code class="language-python" data-prismjs-copy="Сopy me"data-prismjs-copy-success="I've been copied!" >
-                                     
-                                class Student(Person):
-                                  def __init__(self, fname, lname, year):
-                                    super().__init__(fname, lname)
-                                    self.graduationyear = year
-                              
-                                  def welcome(self):
-                                    print("Welcome", self.firstname, self.lastname, "to the class of", self.graduationyear)
-                               
-                                        </code></pre>
-                        <p>If you add a method in the child class with the same name as a function in the parent
-                            class, the inheritance of the parent method will be overridden.</p>
-                        <button class="test-btn" onclick="redirect(this)">Practice test</button>
-                        <button class="button"> </button>
-                    </span>
+                <div class="row rest">
+                    <div class="col-12 text-center">
+                        <span class="text">
+                            <h4>Congratulations, you have reached the last test of this course! We hope you've learned
+                                enough, to get out there, get the job of your dreams and change the world... always
+                                while using python! By finishing this exam not only you will get a purple reward meaning
+                                that you completed the expert's test, but also a reward meaning that you completed this
+                                course!
+                                After you finish the exam, if you pass, you can show off your badge,
+                                located in your profile page. If, on the other hand fail, don't worry! You can study a
+                                bit more and re-take the test! Second chances are very important when learning a new
+                                skill! </h4>
+                            <img src="{{ url_for('static', filename='images/expert.png') }}" alt=""
+                                style="width: 300px;margin:0 auto;margin-bottom: 100px;">
+                            <img src="{{ url_for('static', filename='images/finish.png') }}" alt=""
+                                style="width: 300px;margin:0 auto;margin-bottom: 100px;">
+                            <button class="test-btn" onclick="redirect(this)">Evaluation test</button>
+                            <button class="button"> </button>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
-
     </section>
 
     <script>

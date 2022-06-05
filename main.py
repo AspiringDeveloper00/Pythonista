@@ -104,28 +104,36 @@ def chapters():
         if 'username' in session and 'teacher' not in session:
             connection = mysql.connect()
             cursor = connection.cursor()
-            cursor.execute('select chapter_name from chapters_users_info where user_id=%s',(str(session['id'])))
-            chapters = cursor.fetchall()
-            cursor.execute('select tests.test_name,score from tests inner join tests_users_info on tests.test_name=tests_users_info.test_name where user_id=%s and score>50 order by tests.id',(str(session['id'])))
-            tests = cursor.fetchall()
-            cursor.execute('select chapter_name from chapters order by id')
-            all_chapters = cursor.fetchall()
-            cursor.execute('select test_name from tests order by id')
-            all_tests = cursor.fetchall()
-            connection.close()
-            completed_chapters = []
-            completed_tests = []
-            all_chapters_formatted = []
-            all_tests_formatted = []
-            for row in chapters:
-                completed_chapters.append(row[0])
-            for row in tests:
-                completed_tests.append(row[0])
-            for row in all_chapters:
-                all_chapters_formatted.append(row[0])
-            for row in all_tests:
-                all_tests_formatted.append(row[0])
-            return render_template('chapters.html', chapters=completed_chapters, tests=completed_tests, all_chapters=all_chapters_formatted, all_tests=all_tests_formatted)
+            cursor.execute('select * from levels where user_id=%s',(str(session['id'])))
+            result=cursor.fetchall()
+            if len(result)==0:
+                flash('Wanna take a test to determine your level and possibly skip a couple of chapters?','info')
+                return render_template('chapters.html')
+            else:
+                cursor.execute(
+                    'select chapter_name from chapters_users_info where user_id=%s', (str(session['id'])))
+                chapters = cursor.fetchall()
+                cursor.execute(
+                    'select tests.test_name,score from tests inner join tests_users_info on tests.test_name=tests_users_info.test_name where user_id=%s and score>50 order by tests.id', (str(session['id'])))
+                tests = cursor.fetchall()
+                cursor.execute('select chapter_name from chapters order by id')
+                all_chapters = cursor.fetchall()
+                cursor.execute('select test_name from tests order by id')
+                all_tests = cursor.fetchall()
+                connection.close()
+                completed_chapters = []
+                completed_tests = []
+                all_chapters_formatted = []
+                all_tests_formatted = []
+                for row in chapters:
+                    completed_chapters.append(row[0])
+                for row in tests:
+                    completed_tests.append(row[0])
+                for row in all_chapters:
+                    all_chapters_formatted.append(row[0])
+                for row in all_tests:
+                    all_tests_formatted.append(row[0])
+                return render_template('chapters.html', chapters=completed_chapters, tests=completed_tests, all_chapters=all_chapters_formatted, all_tests=all_tests_formatted)
         else:
             flash(
                 "You have to log in or create an account first, to access our learning materials!", 'info')
@@ -179,20 +187,29 @@ def tests():
                     'select id from tests where test_name=\''+str(curr_test)+'\'')
                 curr_test_id = cursor.fetchall()
                 valid = True
-                for i in range(len(tests)):
-                    if tests[i][0] != i+1:
+                if len(curr_test_id) > 0:
+                    for i in range(len(tests)):
+                        if tests[i][0] != i+1:
+                            valid = False
+                    if len(tests)+1 != curr_test_id[0][0]:
                         valid = False
-                if len(tests)+1 != curr_test_id[0][0]:
-                    valid = False
-                if valid == True:
-                    cursor.execute('select * from tests_questions where test_name=%s',curr_test)
-                    questions=cursor.fetchall()
-                    questions=random.sample(questions,3)
-                    connection.close()
-                    return render_template('test.html',questions=questions)
+                    if valid == True:
+                        cursor.execute(
+                            'select question_type,question,multiple1,multiple2,multiple3,multiple4,chapter_name,subchapter from tests_questions where test_name=%s', curr_test)
+                        questions = cursor.fetchall()
+                        if curr_test[0] == 'C' or curr_test[0] == 'Q':
+                            questions = random.sample(questions, 3)
+                        else:
+                            questions = random.sample(questions, 6)
+                        connection.close()
+                        return render_template('test.html', questions=questions)
+                    else:
+                        connection.close()
+                        flash(
+                            'You have no access to that test. You have to pass the previous ones first!', 'error')
+                        return redirect(url_for("chapters"))
                 else:
-                    connection.close()
-                    flash('You have no access to that test. You have to pass the previous ones first!', 'error')
+                    flash("There is no such test in our database!", 'error')
                     return redirect(url_for("chapters"))
         else:
             flash(
@@ -204,23 +221,25 @@ def tests():
 def profile():
     connection = mysql.connect()
     cursor = connection.cursor()
-    cursor.execute('select chapters.chapter_name from chapters_users_info left outer join chapters on chapters_users_info.chapter_name=chapters.chapter_name where user_id=%s order by id',session['id'])
+    cursor.execute(
+        'select chapters.chapter_name from chapters_users_info left outer join chapters on chapters_users_info.chapter_name=chapters.chapter_name where user_id=%s order by id', session['id'])
     chapters = cursor.fetchall()
     cursor.execute('select chapter_name from chapters order by id')
     all_chapters = cursor.fetchall()
     cursor.execute('select test_name from tests order by id')
     all_tests = cursor.fetchall()
-    cursor.execute('select tests.test_name,score from tests_users_info left outer join tests on tests_users_info.test_name=tests.test_name where user_id=%s order by id',session['id'])
+    cursor.execute(
+        'select tests.test_name,score from tests_users_info left outer join tests on tests_users_info.test_name=tests.test_name where user_id=%s order by id', session['id'])
     tests = cursor.fetchall()
     connection.close()
-    if len(tests)>0:
-        sum=0
+    if len(tests) > 0:
+        sum = 0
         for test in tests:
-            sum+=int(test[1])
-        average=sum/len(tests)
+            sum += int(test[1])
+        average = sum/len(tests)
     else:
-        average="-"
-    return render_template('profile.html',chapters=chapters,tests=tests,all_chapters=all_chapters,all_tests=all_tests,average=average)
+        average = "-"
+    return render_template('profile.html', chapters=chapters, tests=tests, all_chapters=all_chapters, all_tests=all_tests, average=average, sum=sum)
 
 
 @app.route('/logout', methods=['GET'])
@@ -289,6 +308,7 @@ def questions():
         flash('Successfully submitted!', 'success')
         return redirect(url_for("questions"))
 
+
 @app.route('/students', methods=['GET', 'POST'])
 def students():
     if request.method == "GET":
@@ -316,6 +336,51 @@ def students():
             flash(
                 "You have to log in with a teacher account to access that page!", 'error')
             return redirect(url_for("login"))
+
+
+@app.route('/rightanswer', methods=['POST'])
+def rightanswer():
+    if request.method == 'POST':
+        if 'username' in session:
+            question = request.form['question']
+            answer = request.form['answer']
+            connection = mysql.connect()
+            cursor = connection.cursor()
+            cursor.execute(
+                'select right_answer, chapter_name, subchapter from tests_questions where question like %s', ('%'+question+'%'))
+            rightanswer = cursor.fetchall()
+            connection.close()
+            if (len(rightanswer) > 0):
+                if rightanswer[0][0].replace(" ", "").lower() == answer.replace(" ", "").lower():
+                    if rightanswer[0][1] != rightanswer[0][2]:
+                        return jsonify({'success': 'Right answer, great job! This question was from chapter: '+rightanswer[0][1]+' from the sub-chapter: '+rightanswer[0][2]+'.'})
+                    else:
+                        return jsonify({'success': 'Right answer, great job! This question was from chapter: '+rightanswer[0][1]+'.'})
+                else:
+                    if rightanswer[0][1] != rightanswer[0][2]:
+                        return jsonify({'false': 'Wrong answer! Please re-study the chapter: '+rightanswer[0][1]+' and especially the sub-chapter: '+rightanswer[0][2]+'.'})
+                    else:
+                        return jsonify({'false': 'Wrong answer! Please re-study the chapter: '+rightanswer[0][1]+'.'})
+            else:
+                return jsonify({'error': 'There was a bug with our servers, please try again later!'})
+
+
+@app.route('/submitanswer', methods=['POST'])
+def submitanswer():
+    if request.method == 'POST':
+        if 'username' in session:
+            score = request.form['score']
+            test = request.form['test']
+            if float(score) >= 60:
+                connection = mysql.connect()
+                cursor = connection.cursor()
+                cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), test, float(score)))
+                connection.commit()
+                connection.close()
+                return jsonify({'success': 'You have passed the '+test.replace("_", " ").replace('Chapter', 'Chapter ').replace('Test_test', ' test')+' with a score of: '+str(score)+'%.'})
+            else:
+                return jsonify({'error': 'You have failed the '+test.replace("_", " ").replace('Chapter', 'Chapter ').replace('Test_test', ' test')+' with a score of: '+str(score)+'%. You have to score over 60% to pass the test! Try again later...'})
 
 
 if __name__ == '__main__':

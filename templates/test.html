@@ -12,6 +12,8 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/test.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 
@@ -76,7 +78,66 @@
             </div>
         </nav>
     </header>
+    <h1 style="text-align: center; color:aliceblue;"><u>{{ request.args.get('test').replace("_"," ").replace('Chapter', 'Chapter ').replace('Test_test',' test') }}</u></h1>
+    <div class="container-fluid">
 
+
+        {% for question in questions%}
+        {%if question[0]=='gap'%}
+        <div class="row">
+            <div class="col-12 center gap">
+                <h5>Question {{ loop.index }}: {{question[1]}}</h5>
+                <div class="flex">
+                    <input type="text"  id="gap{{loop.index}}">
+                    <button class="readmore">Check answer</button>
+                </div>
+                <p class="invisible" id="result{{loop.index}}">dsfsdfs</p>
+            </div>
+        </div>
+        {% elif question[0]=='rw'%}
+        <div class="row">
+            <div class="col-12 center rw">
+                <h5>Question {{ loop.index }}: {{question[1]}}</h5>
+                <input type="radio" id="right" name="rw{{loop.index}}" value="right">
+                <label for="right">Right</label><br>
+                <input type="radio" id="wrong" name="rw{{loop.index}}" value="wrong">
+                <label for="wrong">Wrong</label><br>
+                <p class="invisible" id="result{{loop.index}}"></p>
+            </div>
+        </div>
+        {% elif question[0]=='mul'%}
+        <div class="row">
+            <div class="col-12 center mul">
+                <h5>Question {{ loop.index }}: {{question[1]}}</h5>
+                {% if question[2]!= "" %}
+                <input type="radio" id="multiple1" name="mul{{loop.index}}" value="{{question[2]}}">
+                <label for="multiple1">{{question[2]}}</label><br>
+                {%endif%}
+                {% if question[3]!= "" %}
+                <input type="radio" id="multiple2" name="mul{{loop.index}}" value="{{question[3]}}">
+                <label for="multiple2">{{question[3]}}</label><br>
+                {%endif%}
+                {% if question[4]!= "" %}
+                <input type="radio" id="multiple3" name="mul{{loop.index}}" value="{{question[4]}}">
+                <label for="multiple3">{{question[4]}}</label><br>
+                {%endif%}
+                {% if question[5]!= "" %}              
+                <input type="radio" id="multiple4" name="mul{{loop.index}}" value="{{question[5]}}">
+                <label for="multiple4">{{question[5]}}</label><br>
+                {%endif%}
+                <p class="invisible" id="result{{loop.index}}"></p>
+            </div>
+        </div>
+        {%endif%}
+        {%endfor%}
+        <div class="row last">
+            <div class="col-12 center">
+                    <button class="readmore2" id="submit">Submit the answers of {{ request.args.get('test').replace("_"," ").replace('Chapter', 'Chapter ').replace('Test_test',' test') }}!</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -90,7 +151,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="{{ url_for('static', filename='javascript/animate.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/navbar.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/python.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/test.js') }}"></script>
     <script>
         AOS.init();
     </script>

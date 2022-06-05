@@ -255,8 +255,9 @@ hr {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.25s ease;
-    float: right;
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    right:150px;
     margin-bottom: 2%;
     margin-right: 1%;
 }
@@ -318,9 +319,8 @@ pre[class*=language-] {
 
 .test-btn{
 
-    float: right;
+    
     display: none;
-
     outline: none;
     height: 40px;
     text-align: center;
@@ -335,8 +335,9 @@ pre[class*=language-] {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.25s ease;
-    float: right;
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    right: 0;
     margin-bottom: 2%;
     margin-right: 1%;
 
