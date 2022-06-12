@@ -200,6 +200,7 @@ $('#submit').click(function () {
                     });
             }
         });
+
         if ($("p.right").length + $("p.wrong").length == 6) {
             score = (($("p.right").length / ($("p.right").length + $("p.wrong").length)) * 100).toFixed(2)
             $.ajax({
@@ -222,7 +223,15 @@ $('#submit').click(function () {
                         }).then(function () {
                             window.location = "chapters";
                         });
+                    }else if  (data.info){
+                        Swal.fire({
+                            icon: 'info',
+                            text: data.info
+                        }).then(function () {
+                            window.location = "chapters";
+                        });
                     }
+
                 });
         } else {
             Swal.fire({

@@ -46,9 +46,24 @@
             denyButtonText: `Nope, let me study!`,
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire('Saved!', '', 'success')
+                window.location.href = "tests?test=levels"
             } else if (result.isDenied) {
-                Swal.fire('Changes are not saved', '', 'info')
+                $.ajax({
+                    data: {
+                        answer: 'no'
+                    },
+                    type: 'POST',
+                    url: '/leveltest'
+                })
+                    .done(function (data) {
+                        if (data.cancel) {
+                            Swal.fire({
+                                icon: 'info',
+                                text: data.cancel
+                            });
+                        }
+
+                    });
             }
         })
     </script>

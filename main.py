@@ -104,10 +104,11 @@ def chapters():
         if 'username' in session and 'teacher' not in session:
             connection = mysql.connect()
             cursor = connection.cursor()
-            cursor.execute('select * from levels where user_id=%s',(str(session['id'])))
-            result=cursor.fetchall()
-            if len(result)==0:
-                flash('Wanna take a test to determine your level and possibly skip a couple of chapters?','info')
+            cursor.execute(
+                'select * from levels where user_id=%s', (str(session['id'])))
+            result = cursor.fetchall()
+            if len(result) == 0:
+                flash('Wanna take a test to determine your level and possibly skip a couple of chapters? If you score 0% to 39% you will be assigned as a beginner. If you score 40% to 69% yu will be assigned as an intermediate. I you score 70% to 100% you will be assigned as an expert.', 'info')
                 return render_template('chapters.html')
             else:
                 cursor.execute(
@@ -177,6 +178,16 @@ def tests():
             if curr_test is None:
                 flash("Select a test from the chapters!", 'info')
                 return redirect(url_for("chapters"))
+            elif curr_test=="levels":
+                connection = mysql.connect()
+                cursor = connection.cursor()
+                cursor.execute(
+                            'select question_type,question,multiple1,multiple2,multiple3,multiple4,chapter_name,subchapter from level_test ')
+
+                questions = cursor.fetchall()
+                connection.close()
+                print(questions)
+                return render_template('test.html', questions=questions)
             else:
                 connection = mysql.connect()
                 cursor = connection.cursor()
@@ -371,16 +382,117 @@ def submitanswer():
         if 'username' in session:
             score = request.form['score']
             test = request.form['test']
-            if float(score) >= 60:
+            if test=='levels':
+                if float(score) < 40:
+                    connection = mysql.connect()
+                    cursor = connection.cursor()
+                    cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (str(
+                    session['id']), 'finished'))
+                    connection.commit()
+                    connection.close()
+                    return jsonify({'info':'You were set to be a beginner because you have scored '+str(score)+'%.'})
+                elif float(score) < 70:
+                    connection = mysql.connect()
+                    cursor = connection.cursor()
+                    cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (str(
+                    session['id']), 'finished'))
+
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Quickstart'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Chapter1'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Chapter2'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Chapter3'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'BasicsTest'))
+
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Quickstart_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Chapter1_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Chapter2_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Chapter3_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'BasicsTest_test',float(100)))
+                    connection.commit()
+                    connection.close()
+                    return jsonify({'info':'You were set to be an intermediate because you have scored '+str(score)+'%.'})
+                else: 
+                    connection = mysql.connect()
+                    cursor = connection.cursor()
+                    cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (str(
+                    session['id']), 'finished'))
+
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Quickstart'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Chapter1'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Chapter2'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Chapter3'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'BasicsTest'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Chapter4'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Chapter5'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'Chapter6'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
+                    session['id']), 'AdvancedTest'))
+
+
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Quickstart_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Chapter1_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Chapter2_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Chapter3_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'BasicsTest_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Chapter4_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Chapter5_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'Chapter6_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                    session['id']), 'AdvancedTest_test',float(100)))
+                    connection.commit()
+                    connection.close()
+                    return jsonify({'info':'You were set to be an expert because you have scored '+str(score)+'%.'})
+            else:
+                if float(score) >= 60:
+                    connection = mysql.connect()
+                    cursor = connection.cursor()
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
+                        session['id']), test, float(score)))
+                    connection.commit()
+                    connection.close()
+                    return jsonify({'success': 'You have passed the '+test.replace("_", " ").replace('Chapter', 'Chapter ').replace('Test_test', ' test')+' with a score of: '+str(score)+'%.'})
+                else:
+                    return jsonify({'error': 'You have failed the '+test.replace("_", " ").replace('Chapter', 'Chapter ').replace('Test_test', ' test')+' with a score of: '+str(score)+'%. You have to score over 60% to pass the test! Try again later...'})
+
+
+@app.route('/leveltest', methods=['POST'])
+def leveltest():
+    if request.method == 'POST':
+        if 'username' in session:
+            if request.form['answer'] == 'no':
                 connection = mysql.connect()
                 cursor = connection.cursor()
-                cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), test, float(score)))
+                cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (str(
+                    session['id']), 'cancel'))
                 connection.commit()
                 connection.close()
-                return jsonify({'success': 'You have passed the '+test.replace("_", " ").replace('Chapter', 'Chapter ').replace('Test_test', ' test')+' with a score of: '+str(score)+'%.'})
-            else:
-                return jsonify({'error': 'You have failed the '+test.replace("_", " ").replace('Chapter', 'Chapter ').replace('Test_test', ' test')+' with a score of: '+str(score)+'%. You have to score over 60% to pass the test! Try again later...'})
+                return jsonify({'cancel':'You were assigned to be a beginner!'})
 
 
 if __name__ == '__main__':

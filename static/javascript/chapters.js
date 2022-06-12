@@ -31,7 +31,7 @@ $('.inner-li').mouseout(
 
 
 $(document).ready(function () {
-    //$('.text').slideUp();
+    $('.text').slideUp();
     $(".button").each(function (index) {
         $(this).attr('name', $(this).parent().parent().parent().parent().attr('id'))
     });
