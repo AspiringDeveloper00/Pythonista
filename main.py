@@ -114,33 +114,31 @@ def chapters():
             result = cursor.fetchall()
             if len(result) == 0:
                 flash('Wanna take a test to determine your level and possibly skip a couple of chapters? If you score 0% to 39% you will be assigned as a beginner. If you score 40% to 69% yu will be assigned as an intermediate. I you score 70% to 100% you will be assigned as an expert.', 'info')
-                return render_template('chapters.html')
-            else:
-                cursor.execute(
-                    'select chapter_name from chapters_users_info where user_id=%s', (session['id']))
-                chapters = cursor.fetchall()
-                cursor.execute(
-                    'select tests.test_name,score from tests inner join tests_users_info on tests.test_name=tests_users_info.test_name where user_id=%s and score>50 order by tests.id', (session['id']))
-                tests = cursor.fetchall()
-                cursor.execute('select chapter_name from chapters order by id')
-                all_chapters = cursor.fetchall()
-                cursor.execute('select test_name from tests order by id')
-                all_tests = cursor.fetchall()
-                connection.close()
-                completed_chapters = []
-                completed_tests = []
-                all_chapters_formatted = []
-                all_tests_formatted = []
-                for row in chapters:
-                    completed_chapters.append(row[0])
-                for row in tests:
-                    completed_tests.append(row[0])
-                for row in all_chapters:
-                    all_chapters_formatted.append(row[0])
-                for row in all_tests:
-                    all_tests_formatted.append(row[0])
-                print(completed_chapters)
-                return render_template('chapters.html', chapters=completed_chapters, tests=completed_tests, all_chapters=all_chapters_formatted, all_tests=all_tests_formatted)
+            cursor.execute(
+                'select chapter_name from chapters_users_info where user_id=%s', (session['id']))
+            chapters = cursor.fetchall()
+            cursor.execute(
+                'select tests.test_name,score from tests inner join tests_users_info on tests.test_name=tests_users_info.test_name where user_id=%s and score>50 order by tests.id', (session['id']))
+            tests = cursor.fetchall()
+            cursor.execute('select chapter_name from chapters order by id')
+            all_chapters = cursor.fetchall()
+            cursor.execute('select test_name from tests order by id')
+            all_tests = cursor.fetchall()
+            connection.close()
+            completed_chapters = []
+            completed_tests = []
+            all_chapters_formatted = []
+            all_tests_formatted = []
+            for row in chapters:
+                completed_chapters.append(row[0])
+            for row in tests:
+                completed_tests.append(row[0])
+            for row in all_chapters:
+                all_chapters_formatted.append(row[0])
+            for row in all_tests:
+                all_tests_formatted.append(row[0])
+            print(completed_chapters)
+            return render_template('chapters.html', chapters=completed_chapters, tests=completed_tests, all_chapters=all_chapters_formatted, all_tests=all_tests_formatted)
         else:
             flash(
                 "You have to log in or create an account first, to access our learning materials!", 'info')
@@ -211,7 +209,7 @@ def tests():
                         valid = False
                     if valid == True:
                         cursor.execute(
-                            'select question_type,question,multiple1,multiple2,multiple3,multiple4,chapter_name,subchapter from tests_questions where test_name=%s', curr_test)
+                            'select question_type,question,multiple1,multiple2,multiple3,multiple4,chapter_name,subchapter,test_id from tests_questions where test_name=%s', curr_test)
                         questions = cursor.fetchall()
                         if curr_test[0] == 'C' or curr_test[0] == 'Q':
                             questions = random.sample(questions, 3)
@@ -248,11 +246,12 @@ def profile():
         'select tests.test_name,score from tests_users_info left outer join tests on tests_users_info.test_name=tests.test_name where user_id=%s order by id', session['id'])
     tests = cursor.fetchall()
     connection.close()
+    sum = 0
     if len(tests) > 0:
-        sum = 0
         for test in tests:
             sum += int(test[1])
         average = sum/len(tests)
+        
     else:
         average = "-"
     return render_template('profile.html', chapters=chapters, tests=tests, all_chapters=all_chapters, all_tests=all_tests, average=average, sum=sum)
@@ -363,7 +362,7 @@ def rightanswer():
             connection = mysql.connect()
             cursor = connection.cursor()
             cursor.execute(
-                'select right_answer, chapter_name, subchapter from tests_questions where question like %s', ('%'+question+'%'))
+                'select right_answer, chapter_name, subchapter from tests_questions where test_id=%s ', (question))
             rightanswer = cursor.fetchall()
             connection.close()
             if (len(rightanswer) > 0):

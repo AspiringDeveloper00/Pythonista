@@ -90,7 +90,8 @@
         {%if question[0]=='gap'%}
         <div class="row">
             <div class="col-12 center gap">
-                <h5>Question {{ loop.index }}: {{question[1]}}</h5>
+                <h5>Question {{ loop.index }}:<span style="display: none;">{{question[8]}}</span> {{question[1]}}</h5>
+
                 <div class="flex">
                     <input type="text"  id="gap{{loop.index}}">
                     <button class="readmore">Check answer</button>
@@ -101,7 +102,7 @@
         {% elif question[0]=='rw'%}
         <div class="row">
             <div class="col-12 center rw">
-                <h5>Question {{ loop.index }}: {{question[1]}}</h5>
+                <h5>Question {{ loop.index }}:<span style="display: none;">{{question[8]}}</span> {{question[1]}}</h5>
                 <input type="radio" id="right" name="rw{{loop.index}}" value="right">
                 <label for="right">Right</label><br>
                 <input type="radio" id="wrong" name="rw{{loop.index}}" value="wrong">
@@ -112,7 +113,8 @@
         {% elif question[0]=='mul'%}
         <div class="row">
             <div class="col-12 center mul">
-                <h5>Question {{ loop.index }}: {{question[1]}}</h5>
+                <h5>Question {{ loop.index }}:<span style="display: none;">{{question[8]}}</span> {{question[1]}}</h5>
+
                 {% if question[2]!= "" %}
                 <input type="radio" id="multiple1" name="mul{{loop.index}}" value="{{question[2]}}">
                 <label for="multiple1">{{question[2]}}</label><br>

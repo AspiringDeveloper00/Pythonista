@@ -23,7 +23,7 @@ $('.readmore').click(function () {
                 text: 'Enter your answer!'
             });
         } else {
-            question = $(this).parent().siblings("h5").text().slice(13,-1).trim();
+            question = $radio.siblings('h5').children('span').text()
             answer = $(this).siblings("input").val();
             var $answer_p = $(this).parent().siblings('p')
             $.ajax({
@@ -60,7 +60,7 @@ $('.readmore').click(function () {
 
 $('input[type=radio]').click(function () {
     $radio = $(this)
-    question = $radio.siblings('h5').text().slice(12).trim();
+    question = $radio.siblings('h5').children('span').text()
     answer = $radio.attr('value');
     $answer_p = $(this).siblings('p')
     if (get('test').slice(0, 1) == 'C' || get('test').slice(0, 1) == 'Q') {
@@ -171,7 +171,7 @@ $('#submit').click(function () {
                     text: 'Enter your answers!'
                 });
             } else {
-                question = $(this).parent().siblings("h5").text().slice(13,-1).trim();
+                question = $radio.siblings('h5').children('span').text();
                 answer = $(this).val();
                 var $answer_p = $(this).parent().siblings('p')
                 $.ajax({
