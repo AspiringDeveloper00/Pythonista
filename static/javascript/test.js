@@ -165,6 +165,7 @@ $('#submit').click(function () {
     } else {
 
 
+        
         $('input[id^="gap"]').each(function (index) {
             if ($(this).val() == "") {
                 Swal.fire({
@@ -172,7 +173,7 @@ $('#submit').click(function () {
                     text: 'Enter your answers!'
                 });
             } else {
-                question = $radio.siblings('h5').children('span').text();
+                question = $(this).parent().siblings('h5').children('span').text();
                 answer = $(this).val();
                 var $answer_p = $(this).parent().siblings('p')
                 $.ajax({
@@ -201,45 +202,56 @@ $('#submit').click(function () {
                     });
             }
         });
-
-        if ($("p.right").length + $("p.wrong").length == 6) {
-            score = (($("p.right").length / ($("p.right").length + $("p.wrong").length)) * 100).toFixed(2)
-            $.ajax({
-                data: { score: score, test: get('test') },
-                type: 'POST',
-                url: '/submitanswer'
-            })
-                .done(function (data) {
-                    if (data.error) {
-                        Swal.fire({
-                            icon: 'error',
-                            text: data.error
-                        }).then(function () {
-                            window.location = "chapters";
+        Swal.fire({
+            icon: 'info',
+            text: 'Are you sure you want to submit?',
+            showDenyButton: true,
+            confirmButtonText: 'Yeah!',
+            denyButtonText: `Nope!`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log($("p.right").length)
+                console.log($("p.wrong").length)
+                if ($("p.right").length + $("p.wrong").length == 6) {
+                    score = (($("p.right").length / ($("p.right").length + $("p.wrong").length)) * 100).toFixed(2)
+                    $.ajax({
+                        data: { score: score, test: get('test') },
+                        type: 'POST',
+                        url: '/submitanswer'
+                    })
+                        .done(function (data) {
+                            if (data.error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    text: data.error
+                                }).then(function () {
+                                    window.location = "chapters";
+                                });
+                            } else if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    text: data.success
+                                }).then(function () {
+                                    window.location = "chapters";
+                                });
+                            }else if  (data.info){
+                                Swal.fire({
+                                    icon: 'info',
+                                    text: data.info
+                                }).then(function () {
+                                    window.location = "chapters";
+                                });
+                            }
+        
                         });
-                    } else if (data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            text: data.success
-                        }).then(function () {
-                            window.location = "chapters";
-                        });
-                    }else if  (data.info){
-                        Swal.fire({
-                            icon: 'info',
-                            text: data.info
-                        }).then(function () {
-                            window.location = "chapters";
-                        });
-                    }
-
-                });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                text: 'You have to complete all the questions!'
-            });
-        }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'You have to complete all the questions!'
+                    });
+                }
+            } });
+        
 
     }
 });
