@@ -9,6 +9,7 @@ $(document).ready(function () {
         $('.readmore').hide()
     }
 });
+
 $('.readmore').click(function () {
     if (get('test').slice(0, 1) == 'C' || get('test').slice(0, 1) == 'Q') {
         $btn = $(this)
@@ -23,7 +24,7 @@ $('.readmore').click(function () {
                 text: 'Enter your answer!'
             });
         } else {
-            question = $radio.siblings('h5').children('span').text()
+            question = $(this).parent().siblings("h5").children('span').text();
             answer = $(this).siblings("input").val();
             var $answer_p = $(this).parent().siblings('p')
             $.ajax({
