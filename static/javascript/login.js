@@ -183,6 +183,7 @@ function login() {
 
 
 function signup() {
+    console.log($('#age').val())
     $.ajax({
         data: {
             username: $('#username').val(),

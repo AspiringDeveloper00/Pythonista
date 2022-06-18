@@ -78,9 +78,13 @@
             </div>
         </nav>
     </header>
+    {% if request.args.get('test').replace("_"," ").replace('Chapter', 'Chapter ').replace('Test_test',' test')!='levels' %}
     <h1 style="text-align: center; color:aliceblue;"><u>{{ request.args.get('test').replace("_"," ").replace('Chapter', 'Chapter ').replace('Test_test',' test') }}</u></h1>
     <div class="container-fluid">
-
+    {%else%}
+    <h1 style="text-align: center; color:aliceblue;"><u>Level approx. Test</u></h1>
+    <div class="container-fluid">
+    {%endif%}
 
         {% for question in questions%}
         {%if question[0]=='gap'%}

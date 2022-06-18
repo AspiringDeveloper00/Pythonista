@@ -4,6 +4,7 @@ import hashlib
 from flaskext.mysql import MySQL
 import random
 from credentials import *
+from datetime import timedelta
 app = Flask(__name__)
 
 
@@ -16,6 +17,10 @@ app.config['MYSQL_DATABASE_DB'] = 'pythonista'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=10)
 
 @app.errorhandler(404)
 def not_found(e):
@@ -105,17 +110,17 @@ def chapters():
             connection = mysql.connect()
             cursor = connection.cursor()
             cursor.execute(
-                'select * from levels where user_id=%s', (str(session['id'])))
+                'select * from levels where user_id=%s', (session['id']))
             result = cursor.fetchall()
             if len(result) == 0:
                 flash('Wanna take a test to determine your level and possibly skip a couple of chapters? If you score 0% to 39% you will be assigned as a beginner. If you score 40% to 69% yu will be assigned as an intermediate. I you score 70% to 100% you will be assigned as an expert.', 'info')
                 return render_template('chapters.html')
             else:
                 cursor.execute(
-                    'select chapter_name from chapters_users_info where user_id=%s', (str(session['id'])))
+                    'select chapter_name from chapters_users_info where user_id=%s', (session['id']))
                 chapters = cursor.fetchall()
                 cursor.execute(
-                    'select tests.test_name,score from tests inner join tests_users_info on tests.test_name=tests_users_info.test_name where user_id=%s and score>50 order by tests.id', (str(session['id'])))
+                    'select tests.test_name,score from tests inner join tests_users_info on tests.test_name=tests_users_info.test_name where user_id=%s and score>50 order by tests.id', (session['id']))
                 tests = cursor.fetchall()
                 cursor.execute('select chapter_name from chapters order by id')
                 all_chapters = cursor.fetchall()
@@ -134,6 +139,7 @@ def chapters():
                     all_chapters_formatted.append(row[0])
                 for row in all_tests:
                     all_tests_formatted.append(row[0])
+                print(completed_chapters)
                 return render_template('chapters.html', chapters=completed_chapters, tests=completed_tests, all_chapters=all_chapters_formatted, all_tests=all_tests_formatted)
         else:
             flash(
@@ -145,7 +151,7 @@ def chapters():
             connection = mysql.connect()
             cursor = connection.cursor()
             cursor.execute(
-                'select id from chapters_users_info inner join chapters on chapters_users_info.chapter_name=chapters.chapter_name where user_id='+str(session['id'])+' order by id')
+                'select id from chapters_users_info inner join chapters on chapters_users_info.chapter_name=chapters.chapter_name where user_id=(%s) order by id',(session['id']))
             chapters = cursor.fetchall()
             cursor.execute(
                 'select id from chapters where chapter_name=\''+str(curr_chapter)+'\'')
@@ -158,8 +164,7 @@ def chapters():
             if len(chapters)+1 != curr_chapter_id[0][0]:
                 valid = False
             if valid == True:
-                cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s) ', (str(
-                    session['id']), curr_chapter))
+                cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s) ', (session['id'], curr_chapter))
                 connection.commit()
                 connection.close()
                 return jsonify({'success': "completed"})
@@ -192,7 +197,7 @@ def tests():
                 connection = mysql.connect()
                 cursor = connection.cursor()
                 cursor.execute(
-                    'select id from tests_users_info inner join tests on tests_users_info.test_name=tests.test_name where user_id='+str(session['id'])+' order by id')
+                    'select id from tests_users_info inner join tests on tests_users_info.test_name=tests.test_name where user_id=(%s) order by id',(session['id']))
                 tests = cursor.fetchall()
                 cursor.execute(
                     'select id from tests where test_name=\''+str(curr_test)+'\'')
@@ -386,85 +391,56 @@ def submitanswer():
                 if float(score) < 40:
                     connection = mysql.connect()
                     cursor = connection.cursor()
-                    cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (str(
-                    session['id']), 'finished'))
+                    cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (
+                    session['id'], 'finished'))
                     connection.commit()
                     connection.close()
                     return jsonify({'info':'You were set to be a beginner because you have scored '+str(score)+'%.'})
                 elif float(score) < 70:
                     connection = mysql.connect()
                     cursor = connection.cursor()
-                    cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (str(
-                    session['id']), 'finished'))
+                    cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (
+                    session['id'], 'finished'))
 
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Quickstart'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Chapter1'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Chapter2'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Chapter3'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'BasicsTest'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Quickstart'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Chapter1'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Chapter2'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Chapter3'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'BasicsTest'))
 
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Quickstart_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Chapter1_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Chapter2_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Chapter3_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'BasicsTest_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Quickstart_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Chapter1_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Chapter2_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Chapter3_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'BasicsTest_test',float(100)))
                     connection.commit()
                     connection.close()
                     return jsonify({'info':'You were set to be an intermediate because you have scored '+str(score)+'%.'})
                 else: 
                     connection = mysql.connect()
                     cursor = connection.cursor()
-                    cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (str(
-                    session['id']), 'finished'))
+                    cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (session['id'], 'finished'))
 
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Quickstart'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Chapter1'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Chapter2'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Chapter3'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'BasicsTest'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Chapter4'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Chapter5'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'Chapter6'))
-                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (str(
-                    session['id']), 'AdvancedTest'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Quickstart'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Chapter1'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Chapter2'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Chapter3'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'BasicsTest'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Chapter4'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Chapter5'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'Chapter6'))
+                    cursor.execute('insert into chapters_users_info (user_id,chapter_name) values(%s,%s)', (session['id'], 'AdvancedTest'))
 
 
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Quickstart_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Chapter1_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Chapter2_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Chapter3_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'BasicsTest_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Chapter4_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Chapter5_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'Chapter6_test',float(100)))
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                    session['id']), 'AdvancedTest_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Quickstart_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Chapter1_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Chapter2_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Chapter3_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'BasicsTest_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Chapter4_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Chapter5_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'Chapter6_test',float(100)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], 'AdvancedTest_test',float(100)))
                     connection.commit()
                     connection.close()
                     return jsonify({'info':'You were set to be an expert because you have scored '+str(score)+'%.'})
@@ -472,8 +448,7 @@ def submitanswer():
                 if float(score) >= 60:
                     connection = mysql.connect()
                     cursor = connection.cursor()
-                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (str(
-                        session['id']), test, float(score)))
+                    cursor.execute('insert into tests_users_info (user_id,test_name,score) values(%s,%s,%s)', (session['id'], test, float(score)))
                     connection.commit()
                     connection.close()
                     return jsonify({'success': 'You have passed the '+test.replace("_", " ").replace('Chapter', 'Chapter ').replace('Test_test', ' test')+' with a score of: '+str(score)+'%.'})
@@ -488,8 +463,8 @@ def leveltest():
             if request.form['answer'] == 'no':
                 connection = mysql.connect()
                 cursor = connection.cursor()
-                cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (str(
-                    session['id']), 'cancel'))
+                cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (
+                    session['id'], 'cancel'))
                 connection.commit()
                 connection.close()
                 return jsonify({'cancel':'You were assigned to be a beginner!'})
