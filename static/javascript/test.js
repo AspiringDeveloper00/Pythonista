@@ -105,25 +105,27 @@ $('input[type=radio]').click(function () {
             type: 'POST',
             url: '/rightanswer'
         })
-            .done(function (data) {
-                $radio.siblings('input[type=radio]').each(function (index) {
-                    $(this).attr("disabled", true);
+        .done(function (data) {
+            $radio.siblings('input[type=radio]').each(function (index) {
+                $(this).attr("disabled", true);
 
-                });
-
-                if (data.error) {
-                    Swal.fire({
-                        icon: 'error',
-                        text: data.error
-                    });
-                } else if (data.success) {
-                    $answer_p.addClass('right')
-                }
-                else if (data.false) {
-                    $answer_p.addClass('wrong')
-
-                }
             });
+
+            if (data.error) {
+                Swal.fire({
+                    icon: 'error',
+                    text: data.error
+                });
+            } else if (data.success) {
+                $answer_p.addClass('right')
+                $answer_p.text(data.success)
+            }
+            else if (data.false) {
+                $answer_p.addClass('wrong')
+                $answer_p.text(data.false)
+
+            }
+        });
     }
 });
 
@@ -210,8 +212,8 @@ $('#submit').click(function () {
             denyButtonText: `Nope!`,
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log($("p.right").length)
-                console.log($("p.wrong").length)
+                $("p.right").removeClass('invisible')
+                $("p.wrong").removeClass('invisible')
                 if ($("p.right").length + $("p.wrong").length == 6) {
                     score = (($("p.right").length / ($("p.right").length + $("p.wrong").length)) * 100).toFixed(2)
                     $.ajax({
@@ -220,27 +222,22 @@ $('#submit').click(function () {
                         url: '/submitanswer'
                     })
                         .done(function (data) {
+                            $("p.right").length
                             if (data.error) {
                                 Swal.fire({
                                     icon: 'error',
                                     text: data.error
-                                }).then(function () {
-                                    window.location = "chapters";
-                                });
+                                })
                             } else if (data.success) {
                                 Swal.fire({
                                     icon: 'success',
                                     text: data.success
-                                }).then(function () {
-                                    window.location = "chapters";
-                                });
+                                })
                             }else if  (data.info){
                                 Swal.fire({
                                     icon: 'info',
                                     text: data.info
-                                }).then(function () {
-                                    window.location = "chapters";
-                                });
+                                })
                             }
         
                         });
@@ -255,3 +252,8 @@ $('#submit').click(function () {
 
     }
 });
+
+
+// .then(function () {
+//     window.location = "chapters";
+// });
