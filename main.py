@@ -137,7 +137,6 @@ def chapters():
                 all_chapters_formatted.append(row[0])
             for row in all_tests:
                 all_tests_formatted.append(row[0])
-            print(completed_chapters)
             return render_template('chapters.html', chapters=completed_chapters, tests=completed_tests, all_chapters=all_chapters_formatted, all_tests=all_tests_formatted)
         else:
             flash(
@@ -155,7 +154,6 @@ def chapters():
                 'select id from chapters where chapter_name=\''+str(curr_chapter)+'\'')
             curr_chapter_id = cursor.fetchall()
             valid = True
-            print(curr_chapter_id, chapters)
             for i in range(len(chapters)):
                 if chapters[i][0] != i+1:
                     valid = False
@@ -185,11 +183,10 @@ def tests():
                 connection = mysql.connect()
                 cursor = connection.cursor()
                 cursor.execute(
-                            'select question_type,question,multiple1,multiple2,multiple3,multiple4,chapter_name,subchapter from level_test ')
+                            'select question_type,question,multiple1,multiple2,multiple3,multiple4,chapter_name,subchapter,test_id  from level_test ')
 
                 questions = cursor.fetchall()
                 connection.close()
-                print(questions)
                 return render_template('test.html', questions=questions)
             else:
                 connection = mysql.connect()
@@ -345,7 +342,6 @@ def students():
                         students[i].append(sum/len(temp))
                 else:
                     students[i].append("-")
-            print(students)
             return render_template('students.html', students=students)
         else:
             flash(
@@ -358,11 +354,18 @@ def rightanswer():
     if request.method == 'POST':
         if 'username' in session:
             question = request.form['question']
+            print(question)
+            
             answer = request.form['answer']
+            print(answer)
             connection = mysql.connect()
             cursor = connection.cursor()
-            cursor.execute(
-                'select right_answer, chapter_name, subchapter from tests_questions where test_id=%s ', (question))
+            if request.args.get('test')=='levels':
+                cursor.execute(
+                    'select right_answer, chapter_name, subchapter from level_test where test_id=%s ', (question))
+            else:
+                cursor.execute(
+                    'select right_answer, chapter_name, subchapter from tests_questions where test_id=%s ', (question))
             rightanswer = cursor.fetchall()
             connection.close()
             if (len(rightanswer) > 0):

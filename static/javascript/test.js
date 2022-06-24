@@ -214,7 +214,7 @@ $('#submit').click(function () {
             if (result.isConfirmed) {
                 $("p.right").removeClass('invisible')
                 $("p.wrong").removeClass('invisible')
-                if ($("p.right").length + $("p.wrong").length == 6) {
+                if ($("p.right").length + $("p.wrong").length == 6 || $("p.right").length + $("p.wrong").length == 10) {
                     score = (($("p.right").length / ($("p.right").length + $("p.wrong").length)) * 100).toFixed(2)
                     $.ajax({
                         data: { score: score, test: get('test') },
@@ -222,7 +222,31 @@ $('#submit').click(function () {
                         url: '/submitanswer'
                     })
                         .done(function (data) {
-                            $("p.right").length
+                            let searchParams = new URLSearchParams(window.location.search)
+                            if (searchParams.get('test')=='levels'){
+                                if (data.error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        text: data.error
+                                    }).then(function () {
+                                        window.location = "chapters";
+                                    });
+                                } else if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        text: data.success
+                                    }).then(function () {
+                                        window.location = "chapters";
+                                    });
+                                }else if  (data.info){
+                                    Swal.fire({
+                                        icon: 'info',
+                                        text: data.info
+                                    }).then(function () {
+                                        window.location = "chapters";
+                                    });
+                                }
+                            }else{
                             if (data.error) {
                                 Swal.fire({
                                     icon: 'error',
@@ -239,7 +263,7 @@ $('#submit').click(function () {
                                     text: data.info
                                 })
                             }
-        
+                            }
                         });
                 } else {
                     Swal.fire({
@@ -254,6 +278,3 @@ $('#submit').click(function () {
 });
 
 
-// .then(function () {
-//     window.location = "chapters";
-// });
