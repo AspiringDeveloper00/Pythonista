@@ -64,11 +64,13 @@ $('input[type=radio]').click(function () {
     question = $radio.siblings('h5').children('span').text()
     answer = $radio.attr('value');
     $answer_p = $(this).siblings('p')
+    let searchParams = new URLSearchParams(window.location.search)
     if (get('test').slice(0, 1) == 'C' || get('test').slice(0, 1) == 'Q') {
         $.ajax({
             data: {
                 question: question,
-                answer: answer
+                answer: answer,
+                test:searchParams.get('test')
             },
             type: 'POST',
             url: '/rightanswer'
@@ -100,7 +102,8 @@ $('input[type=radio]').click(function () {
         $.ajax({
             data: {
                 question: question,
-                answer: answer
+                answer: answer,
+                test:searchParams.get('test')
             },
             type: 'POST',
             url: '/rightanswer'
@@ -181,7 +184,8 @@ $('#submit').click(function () {
                 $.ajax({
                     data: {
                         question: question,
-                        answer: answer
+                        answer: answer,
+                        test:searchParams.get('test')
                     },
                     type: 'POST',
                     url: '/rightanswer'

@@ -354,19 +354,18 @@ def rightanswer():
     if request.method == 'POST':
         if 'username' in session:
             question = request.form['question']
-            print(question)
-            
             answer = request.form['answer']
-            print(answer)
+            test=request.form['test']
             connection = mysql.connect()
             cursor = connection.cursor()
-            if request.args.get('test')=='levels':
+            if test=='levels':
                 cursor.execute(
                     'select right_answer, chapter_name, subchapter from level_test where test_id=%s ', (question))
             else:
                 cursor.execute(
                     'select right_answer, chapter_name, subchapter from tests_questions where test_id=%s ', (question))
             rightanswer = cursor.fetchall()
+            print(rightanswer)
             connection.close()
             if (len(rightanswer) > 0):
                 if rightanswer[0][0].replace(" ", "").lower() == answer.replace(" ", "").lower():
