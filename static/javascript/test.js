@@ -70,7 +70,7 @@ $('input[type=radio]').click(function () {
             data: {
                 question: question,
                 answer: answer,
-                test:searchParams.get('test')
+                test: searchParams.get('test')
             },
             type: 'POST',
             url: '/rightanswer'
@@ -103,32 +103,32 @@ $('input[type=radio]').click(function () {
             data: {
                 question: question,
                 answer: answer,
-                test:searchParams.get('test')
+                test: searchParams.get('test')
             },
             type: 'POST',
             url: '/rightanswer'
         })
-        .done(function (data) {
-            $radio.siblings('input[type=radio]').each(function (index) {
-                $(this).attr("disabled", true);
+            .done(function (data) {
+                $radio.siblings('input[type=radio]').each(function (index) {
+                    $(this).attr("disabled", true);
 
-            });
-
-            if (data.error) {
-                Swal.fire({
-                    icon: 'error',
-                    text: data.error
                 });
-            } else if (data.success) {
-                $answer_p.addClass('right')
-                $answer_p.text(data.success)
-            }
-            else if (data.false) {
-                $answer_p.addClass('wrong')
-                $answer_p.text(data.false)
 
-            }
-        });
+                if (data.error) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: data.error
+                    });
+                } else if (data.success) {
+                    $answer_p.addClass('right')
+                    $answer_p.text(data.success)
+                }
+                else if (data.false) {
+                    $answer_p.addClass('wrong')
+                    $answer_p.text(data.false)
+
+                }
+            });
     }
 });
 
@@ -170,8 +170,9 @@ $('#submit').click(function () {
     } else {
 
 
-        
+
         $('input[id^="gap"]').each(function (index) {
+            let searchParams = new URLSearchParams(window.location.search)
             if ($(this).val() == "") {
                 Swal.fire({
                     icon: 'info',
@@ -185,7 +186,7 @@ $('#submit').click(function () {
                     data: {
                         question: question,
                         answer: answer,
-                        test:searchParams.get('test')
+                        test: searchParams.get('test')
                     },
                     type: 'POST',
                     url: '/rightanswer'
@@ -216,8 +217,6 @@ $('#submit').click(function () {
             denyButtonText: `Nope!`,
         }).then((result) => {
             if (result.isConfirmed) {
-                $("p.right").removeClass('invisible')
-                $("p.wrong").removeClass('invisible')
                 if ($("p.right").length + $("p.wrong").length == 6 || $("p.right").length + $("p.wrong").length == 10) {
                     score = (($("p.right").length / ($("p.right").length + $("p.wrong").length)) * 100).toFixed(2)
                     $.ajax({
@@ -227,7 +226,7 @@ $('#submit').click(function () {
                     })
                         .done(function (data) {
                             let searchParams = new URLSearchParams(window.location.search)
-                            if (searchParams.get('test')=='levels'){
+                            if (searchParams.get('test') == 'levels') {
                                 if (data.error) {
                                     Swal.fire({
                                         icon: 'error',
@@ -242,7 +241,7 @@ $('#submit').click(function () {
                                     }).then(function () {
                                         window.location = "chapters";
                                     });
-                                }else if  (data.info){
+                                } else if (data.info) {
                                     Swal.fire({
                                         icon: 'info',
                                         text: data.info
@@ -250,23 +249,25 @@ $('#submit').click(function () {
                                         window.location = "chapters";
                                     });
                                 }
-                            }else{
-                            if (data.error) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    text: data.error
-                                })
-                            } else if (data.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    text: data.success
-                                })
-                            }else if  (data.info){
-                                Swal.fire({
-                                    icon: 'info',
-                                    text: data.info
-                                })
-                            }
+                            } else {
+                                $("p.right").removeClass('invisible')
+                                $("p.wrong").removeClass('invisible')
+                                if (data.error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        text: data.error
+                                    })
+                                } else if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        text: data.success,
+                                    })
+                                } else if (data.info) {
+                                    Swal.fire({
+                                        icon: 'info',
+                                        text: data.info
+                                    })
+                                }
                             }
                         });
                 } else {
@@ -275,8 +276,9 @@ $('#submit').click(function () {
                         text: 'You have to complete all the questions!'
                     });
                 }
-            } });
-        
+            }
+        });
+
 
     }
 });
