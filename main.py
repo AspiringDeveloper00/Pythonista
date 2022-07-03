@@ -114,6 +114,7 @@ def chapters():
             result = cursor.fetchall()
             if len(result) == 0:
                 flash('Wanna take a test to determine your level and possibly skip a couple of chapters? If you score 0% to 39% you will be assigned as a beginner. If you score 40% to 69% yu will be assigned as an intermediate. I you score 70% to 100% you will be assigned as an expert.', 'info')
+                return render_template('chapters.html')
             cursor.execute(
                 'select chapter_name from chapters_users_info where user_id=%s', (session['id']))
             chapters = cursor.fetchall()

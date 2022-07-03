@@ -26,11 +26,13 @@ $('.readmore').click(function () {
         } else {
             question = $(this).parent().siblings("h5").children('span').text();
             answer = $(this).siblings("input").val();
+            let searchParams = new URLSearchParams(window.location.search)
             var $answer_p = $(this).parent().siblings('p')
             $.ajax({
                 data: {
                     question: question,
-                    answer: answer
+                    answer: answer,
+                    test: searchParams.get('test')
                 },
                 type: 'POST',
                 url: '/rightanswer'
