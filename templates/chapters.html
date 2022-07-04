@@ -57,6 +57,7 @@
                 })
                     .done(function (data) {
                         if (data.cancel) {
+                            format(data.chapters, data.tests, data.all_chapters, data.all_tests);
                             Swal.fire({
                                 icon: 'info',
                                 text: data.cancel

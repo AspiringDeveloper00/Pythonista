@@ -468,8 +468,30 @@ def leveltest():
                 cursor.execute('insert into levels (user_id,level_test) values(%s,%s)', (
                     session['id'], 'cancel'))
                 connection.commit()
+                cursor.execute(
+                'select chapter_name from chapters_users_info where user_id=%s', (session['id']))
+                chapters = cursor.fetchall()
+                cursor.execute(
+                    'select tests.test_name,score from tests inner join tests_users_info on tests.test_name=tests_users_info.test_name where user_id=%s and score>50 order by tests.id', (session['id']))
+                tests = cursor.fetchall()
+                cursor.execute('select chapter_name from chapters order by id')
+                all_chapters = cursor.fetchall()
+                cursor.execute('select test_name from tests order by id')
+                all_tests = cursor.fetchall()
                 connection.close()
-                return jsonify({'cancel':'You were assigned to be a beginner!'})
+                completed_chapters = []
+                completed_tests = []
+                all_chapters_formatted = []
+                all_tests_formatted = []
+                for row in chapters:
+                    completed_chapters.append(row[0])
+                for row in tests:
+                    completed_tests.append(row[0])
+                for row in all_chapters:
+                    all_chapters_formatted.append(row[0])
+                for row in all_tests:
+                    all_tests_formatted.append(row[0])    
+                return jsonify({'cancel':'You were assigned to be a beginner!','chapters':completed_chapters,'tests':completed_tests,'all_chapters':all_chapters_formatted,'all_tests':all_tests_formatted})
 
 
 if __name__ == '__main__':
